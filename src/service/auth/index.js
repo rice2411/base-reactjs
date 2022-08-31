@@ -11,9 +11,9 @@ class AuthService {
     let uri = router.login;
     return fetch.post(uri, params);
   }
-  static verify(params) {
+  static verify() {
     let uri = router.verify;
-    return fetch.post(uri, params);
+    return fetch.get(uri);
   }
 }
 

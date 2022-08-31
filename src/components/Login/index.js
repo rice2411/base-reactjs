@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import AuthService from "../../service/auth";
-import { setIsValidToken, setToken } from "../../utils/auth";
-
+import UserService from "../../service/user";
+import { setIsValidToken, setToken, setUser } from "../../utils/auth";
+import "./styles.scss";
 export default function Login() {
   const { setAuth, persist, setPersist } = useAuth();
 
@@ -39,11 +40,19 @@ export default function Login() {
       const response = await AuthService.login(params);
 
       const { token } = response?.data?.data;
+
       setToken(token);
       setIsValidToken(true);
       setAuth({ token });
+
+      const userResponse = await UserService.getMe();
+      if (userResponse?.data?.data) {
+        setUser(userResponse?.data?.data);
+      }
+
       setUserName("");
       setPassword("");
+
       navigate(from, { replace: true });
     } catch (err) {
       if (err?.response) {
@@ -66,13 +75,6 @@ export default function Login() {
   return (
     <>
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <p
-          ref={errRef}
-          className={errMsg ? "errmsg" : "offscreen"}
-          aria-live="assertive"
-        >
-          {errMsg}
-        </p>
         <div className="max-w-md w-full space-y-8">
           <div>
             <img
@@ -130,7 +132,13 @@ export default function Login() {
                 />
               </div>
             </div>
-
+            <p
+              ref={errRef}
+              className={`text-center ${errMsg ? "errmsg" : "offscreen"}`}
+              aria-live="assertive"
+            >
+              {errMsg}
+            </p>
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input

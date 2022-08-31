@@ -9,15 +9,15 @@ import {
 } from "@heroicons/react/outline";
 import { navigation } from "./navbarData";
 import { classNames } from "./helper";
-import useAuth from "../../../hooks/useAuth";
 
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useMode from "../../../hooks/useMode";
-import { logout, verifyToken } from "../../../utils/auth";
+import { getUser, logout } from "../../../utils/auth";
+import { FILE_PATH } from "../../../constant/staticPath";
 
 export default function Navbar() {
   const [navi, setNavi] = useState(navigation);
-  const { auth } = useAuth();
+  const user = getUser();
   const { mode, toggleMode } = useMode();
 
   const handleInitActiveTab = () => {
@@ -126,11 +126,11 @@ export default function Navbar() {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src={auth.avatar || ""}
+                        src={FILE_PATH + user.avatar || ""}
                         alt=""
                       />
                       <h3 className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                        {auth.username}
+                        {user.username}
                       </h3>
                     </Menu.Button>
                   </div>

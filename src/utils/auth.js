@@ -24,7 +24,7 @@ export function getIsValidToken() {
 }
 
 export function setUser(user) {
-  cookies.set("user", user);
+  cookies.set("user", JSON.stringify(user));
   return user;
 }
 export function getUser() {
@@ -43,7 +43,7 @@ export const isLogin = async () => {
   let isValidToken = null;
   const currentPath = window.location.href;
   if (token) {
-    isValidToken = await verifyToken(token);
+    isValidToken = await verifyToken();
   }
   if (isValidToken != null) {
     if (currentPath.includes("/login")) window.location.href = "/dashboard";
@@ -51,12 +51,10 @@ export const isLogin = async () => {
     if (!currentPath.includes("/login")) window.location.href = "/login";
   }
 };
-
 export const verifyToken = async () => {
   const token = getToken();
-  let param = { token: token };
   try {
-    await AuthService.verify(param);
+    await AuthService.verify();
     setIsValidToken(true);
     return token;
   } catch (err) {
