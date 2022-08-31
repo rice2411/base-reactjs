@@ -11,14 +11,15 @@ import { navigation } from "./navbarData";
 import { classNames } from "./helper";
 
 import { Link } from "react-router-dom";
-import useMode from "../../../hooks/useMode";
+
 import { getUser, logout } from "../../../utils/auth";
 import { FILE_PATH } from "../../../constant/staticPath";
+import useMode from "../../../hooks/useMode";
 
 export default function Navbar() {
   const [navi, setNavi] = useState(navigation);
-  const user = getUser();
   const { mode, toggleMode } = useMode();
+  const user = getUser();
 
   const handleInitActiveTab = () => {
     const path = window.location.href.split("/");
@@ -105,7 +106,8 @@ export default function Navbar() {
                   className="hover:bg-gray-700 bg-gray-800 p-1 rounded text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 >
                   <span className="sr-only">View notifications</span>
-                  {mode ? (
+
+                  {mode === "dark" ? (
                     <MoonIcon className="h-6 w-6" aria-hidden="true" />
                   ) : (
                     <LightBulbIcon className="h-6 w-6" aria-hidden="true" />
@@ -114,9 +116,9 @@ export default function Navbar() {
                 <div
                   id="tooltip-default"
                   role="tooltip"
-                  className="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700"
+                  className=" inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700"
                 >
-                  Turn on {mode ? " dark " : " light "}mode
+                  Turn on {mode === "dark" ? " dark " : " light "}mode
                   <div className="tooltip-arrow" data-popper-arrow></div>
                 </div>
                 {/* Profile dropdown */}
@@ -143,7 +145,7 @@ export default function Navbar() {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="z-10 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
                           <a

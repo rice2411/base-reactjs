@@ -8,7 +8,7 @@ import RequireAuth from "./helper/requireAuth";
 import LayoutPage from "./pages/layout";
 import UserPage from "./pages/user";
 
-import "./styles/_reset.scss";
+// import "./styles/_reset.scss";
 import "./styles/global/_global.css";
 import PersistLogin from "./helper/persistLogin";
 

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useMode from "../../hooks/useMode";
+
 import UserService from "../../service/user";
 
 /* This example requires Tailwind CSS v2.0+ */
@@ -22,15 +22,11 @@ const features = [
 ];
 
 export default function Dashboard() {
-  const { mode } = useMode();
-
   return (
     <div className=" py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-2">
       <div>
         <h2
-          className={`text-3xl font-extrabold tracking-tight sm:text-4xl ${
-            mode ? "text-gray-900" : "text-white"
-          }`}
+          className={`text-3xl font-extrabold tracking-tight sm:text-4xl text-gray-900 dark:text-white`}
         >
           Basic React App
         </h2>
@@ -42,12 +38,8 @@ export default function Dashboard() {
 
         <dl className="mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-16 lg:gap-x-8">
           {features.map((feature) => (
-            <div key={feature.name} className="border-t border-gray-200 pt-4">
-              <dt
-                className={`font-medium ${
-                  mode ? "text-gray-900" : "text-white"
-                }`}
-              >
+            <div key={feature.name} className="pt-4">
+              <dt className={`font-medium text-gray-900 dark:text-white`}>
                 {feature.name}
               </dt>
               <dd className="mt-2 text-sm text-gray-500">
