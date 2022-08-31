@@ -89,7 +89,7 @@ export default function Login() {
                 href="12"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                start your 14-day free trial
+                sign up here
               </a>
             </p>
           </div>

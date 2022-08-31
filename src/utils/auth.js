@@ -33,17 +33,19 @@ export function getUser() {
   }
   return "";
 }
-
+export const logout = async () => {
+  cookies.remove("token");
+  cookies.remove("isValid");
+  window.location.href = "/login";
+};
 export const isLogin = async () => {
   const token = getToken();
-  if (token) {
-    verifyToken(token);
-  }
-
-  const isValidToken = getIsValidToken();
+  let isValidToken = null;
   const currentPath = window.location.href;
-  console.log(isValidToken);
-  if (isValidToken) {
+  if (token) {
+    isValidToken = await verifyToken(token);
+  }
+  if (isValidToken != null) {
     if (currentPath.includes("/login")) window.location.href = "/dashboard";
   } else {
     if (!currentPath.includes("/login")) window.location.href = "/login";
@@ -59,7 +61,7 @@ export const verifyToken = async () => {
     return token;
   } catch (err) {
     setIsValidToken(false);
-    console.log(err);
+    console.log(err.message);
     return null;
   }
 };

@@ -10,25 +10,21 @@ import {
 import { navigation } from "./navbarData";
 import { classNames } from "./helper";
 import useAuth from "../../../hooks/useAuth";
-import useLogout from "../../../hooks/useLogout";
+
 import { Link, Navigate } from "react-router-dom";
 import useMode from "../../../hooks/useMode";
-import { isLogin, verifyToken } from "../../../utils/auth";
+import { logout, verifyToken } from "../../../utils/auth";
 
 export default function Navbar() {
   const [navi, setNavi] = useState(navigation);
   const { auth } = useAuth();
   const { mode, toggleMode } = useMode();
 
-  const logout = useLogout();
-
-  const signOut = async () => {
-    await logout();
-  };
   const handleInitActiveTab = () => {
     const path = window.location.href.split("/");
     const page = path[path.length - 1];
-    activeTab(page);
+
+    activeTab(page ? page : "dashboard");
   };
   const activeTab = (page) => {
     let naviArr = [...navi];
@@ -39,7 +35,6 @@ export default function Navbar() {
     setNavi(naviArr);
   };
   const handleChangeTab = (e) => {
-    verifyToken();
     const path = e.target.href.split("/");
     const page = path[path.length - 1];
     activeTab(page);
@@ -152,7 +147,7 @@ export default function Navbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="12"
+                            href="javascript:void(0)"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
@@ -165,7 +160,7 @@ export default function Navbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="12"
+                            href="javascript:void(0)"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
@@ -178,8 +173,9 @@ export default function Navbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
+                            href="javascript:void(0)"
                             onClick={() => {
-                              signOut();
+                              logout();
                             }}
                             className={classNames(
                               active ? "bg-gray-100" : "",
