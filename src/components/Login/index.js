@@ -66,14 +66,8 @@ export default function Login() {
   return (
     <>
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <p
-          ref={errRef}
-          className={errMsg ? "errmsg" : "offscreen"}
-          aria-live="assertive"
-        >
-          {errMsg}
-        </p>
-        <div className="max-w-md w-full space-y-8">
+        
+        <div className="max-w-md w-full">
           <div>
             <img
               className="mx-auto h-12 w-auto"
@@ -93,6 +87,15 @@ export default function Login() {
               </a>
             </p>
           </div>
+
+          <p
+            ref={errRef}
+            className={`${errMsg ? "errmsg" : "offscreen"} text-red-500 text-center mt-4`}
+            aria-live="assertive"
+          >
+            {errMsg}
+          </p>
+
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="rounded-md shadow-sm -space-y-px">
