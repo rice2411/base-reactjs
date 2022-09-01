@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import Dashboard from "../../components/Dashboard";
-import { isLogin } from "../../utils/auth";
+import useAuth from "../../hooks/useAuth";
 
 export default function DashboardPage() {
+  const { isLogin } = useAuth();
   useEffect(() => {
     isLogin();
   }, []);

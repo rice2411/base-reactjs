@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 
 import Login from "../../components/Login";
-import { isLogin } from "../../utils/auth";
+import useAuth from "../../hooks/useAuth";
 
 const LoginPage = () => {
+  const { isLogin } = useAuth();
   useEffect(() => {
     isLogin();
   }, []);
