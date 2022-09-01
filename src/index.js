@@ -13,13 +13,13 @@ if (process.env.NODE_ENV === "production") {
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <ModeProvider>
-          <Routes>
-            <Route path="/*" element={<App />} />
-          </Routes>
-        </ModeProvider>
-      </AuthProvider>
+        <AuthProvider>
+          <ModeProvider>
+            <Routes>
+              <Route path="/*" element={<App />} />
+            </Routes>
+          </ModeProvider>
+        </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
