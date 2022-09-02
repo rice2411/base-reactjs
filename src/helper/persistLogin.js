@@ -2,16 +2,11 @@ import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import AuthService from "../service/auth";
-import {
-  getIsValidToken,
-  getToken,
-  setIsValidToken,
-  verifyToken,
-} from "../utils/auth";
+import { getIsValidToken, getToken, setIsValidToken } from "../utils/auth";
 
 const PersistLogin = () => {
   let isValidToken = getIsValidToken();
-
+  const { verifyToken } = useAuth();
   const location = useLocation();
   const validateToken = async () => {
     verifyToken();

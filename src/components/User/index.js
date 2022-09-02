@@ -1,17 +1,46 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FILE_PATH } from "../../constant/staticPath";
-
 import UserService from "../../service/user";
+import { debounce } from "lodash";
+import Pagination from "../../shared/Table/Pagination";
+import Loading from "../../shared/Animations/Loading";
+import { PAGINATE } from "../../constant/paginate";
 
 export default function User() {
+  const actionListRef = useRef(null);
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [contentSearch, setContentSearch] = useState("");
+  const params = {
+    page: 1,
+    limit: PAGINATE.limit,
+    search: contentSearch || "",
+  };
   const [pagination, setPagination] = useState({
     limit: 10,
     page: 0,
     totalDocs: 0,
     totalPages: 0,
   });
-  const actionListRef = useRef(null);
+
+  const fetchUsers = async (params) => {
+    const param = {
+      ...params,
+      search: params.search || "",
+    };
+    setIsLoading(true);
+    try {
+      const response = await UserService.getUsers(param);
+      if (response?.data?.data) {
+        setUsers(response?.data?.data);
+        setPagination(response?.data?.paginate);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleShowAction = () => {
     if (actionListRef.current.classList.contains("hidden")) {
       actionListRef.current.classList.remove("hidden");
@@ -21,19 +50,23 @@ export default function User() {
       actionListRef.current.classList.add("hidden");
     }
   };
-  const fetchUsers = async () => {
-    try {
-      const response = await UserService.getUsers();
-      if (response?.data?.data) {
-        setUsers(response?.data?.data);
-        setPagination(response?.data?.paginate);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  const handleChangeSearch = (e) => {
+    setContentSearch(e.target.value);
+    handleDebounceSearch(e.target.value);
   };
+
+  const handleDebounceSearch = useCallback(
+    debounce((searchValue) => {
+      fetchUsers({
+        ...params,
+        search: searchValue,
+      });
+    }, 400),
+    []
+  );
   useEffect(() => {
-    fetchUsers();
+    fetchUsers(params);
+    setContentSearch("");
   }, []);
 
   return (
@@ -149,6 +182,8 @@ export default function User() {
               id="table-search-users"
               className="block p-2 pl-10 w-80 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Search for users"
+              value={contentSearch || ""}
+              onChange={handleChangeSearch}
             />
           </div>
         </div>
@@ -167,80 +202,115 @@ export default function User() {
                   </label>
                 </div>
               </th>
+
               <th scope="col" className="py-3 px-6">
-                Name
+                STT
+              </th>
+
+              <th scope="col" className="py-3 px-6">
+                Họ và tên
               </th>
               <th scope="col" className="py-3 px-6">
-                Position
+                Tên đăng nhập
               </th>
               <th scope="col" className="py-3 px-6">
-                Status
+                Trạng thái email
               </th>
               <th scope="col" className="py-3 px-6">
-                Action
+                Hành động
               </th>
             </tr>
           </thead>
-          <tbody>
-            {users &&
-              users?.length &&
-              users.map((user, index) => (
-                <tr
-                  key={user?._id}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 "
-                >
-                  <td className="p-4 w-4 align-middle">
-                    <div className="flex items-center">
-                      <input
-                        id="checkbox-table-search-1"
-                        type="checkbox"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        htmlFor="checkbox-table-search-1"
-                        className="sr-only"
-                      >
-                        checkbox
-                      </label>
-                    </div>
-                  </td>
-                  <th
-                    scope="row"
-                    className="flex items-center py-4 px-6 text-gray-900 whitespace-nowrap dark:text-white"
+          {isLoading ? (
+            <tr className="text-center">
+              <td colSpan={6} className="py-4 px-6">
+                <Loading />
+              </td>
+            </tr>
+          ) : (
+            <tbody>
+              {users && users?.length ? (
+                users.map((user, index) => (
+                  <tr
+                    key={user?._id}
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 "
                   >
-                    <img
-                      className="w-10 h-10 rounded-full"
-                      src={`${FILE_PATH + user?.avatar}`}
-                      alt="Jese image"
-                    />
-                    <div className="pl-3">
-                      <div className="text-base font-semibold">
-                        {user?.firstname + " " + user?.lastname}
+                    <td className="p-4 w-4 align-middle">
+                      <div className="flex items-center">
+                        <input
+                          id="checkbox-table-search-1"
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label
+                          htmlFor="checkbox-table-search-1"
+                          className="sr-only"
+                        >
+                          checkbox
+                        </label>
                       </div>
-                      <div className="font-normal text-gray-500">
-                        {user?.email}
-                      </div>
-                    </div>
-                  </th>
-                  <td className="py-4 px-6 align-middle">React Developer</td>
-                  <td className="py-4 px-6 align-middle">
-                    <div className="flex items-center">
-                      <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2" />{" "}
-                      Online
-                    </div>
-                  </td>
-                  <td className="py-4 px-6 align-middle">
-                    <a
-                      href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    </td>
+                    <th className="py-4 px-6 align-middle">
+                      {PAGINATE.limit * (pagination?.page - 1) + index + 1}
+                    </th>
+                    <th
+                      scope="row"
+                      className="flex items-center py-4 px-6 text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      Edit user
-                    </a>
+                      <img
+                        className="w-10 h-10 rounded-full"
+                        src={`${FILE_PATH + user?.avatar}`}
+                        alt={`${user?.username} avatar`}
+                      />
+                      <div className="pl-3">
+                        <div className="text-base font-semibold">
+                          {user?.firstname + " " + user?.lastname}
+                        </div>
+                        <div className="font-normal text-gray-500">
+                          {user?.email || "Tài khoản chưa đăng ký email"}
+                        </div>
+                      </div>
+                    </th>
+                    <td className="align-middle py-4 px-6 ">
+                      {user?.username}
+                    </td>
+                    <td className="py-4 px-6 align-middle">
+                      <div className="flex items-center">
+                        <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2" />{" "}
+                        Đã xác thực
+                      </div>
+                    </td>
+                    <td className="py-4 px-6 align-middle">
+                      <a
+                        href="#"
+                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      >
+                        Edit user
+                      </a>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr className="text-center">
+                  <td colSpan={6} className="py-4 px-6">
+                    {" "}
+                    "Hiện không có dữ liệu phù hợp"
                   </td>
                 </tr>
-              ))}
-          </tbody>
+              )}
+            </tbody>
+          )}
         </table>
+      </div>
+      <div className="flex justify-center items-center mt-3">
+        {pagination?.totalPages > 1 && (
+          <Pagination
+            setIsLoading={setIsLoading}
+            fetchData={fetchUsers}
+            paginate={pagination}
+            params={params}
+          />
+        )}
       </div>
     </div>
   );

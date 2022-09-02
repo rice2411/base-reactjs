@@ -12,11 +12,13 @@ import { classNames } from "./helper";
 
 import { Link } from "react-router-dom";
 
-import { getUser, logout } from "../../../utils/auth";
+import { getUser } from "../../../utils/auth";
 import { FILE_PATH } from "../../../constant/staticPath";
 import useMode from "../../../hooks/useMode";
+import useAuth from "../../../hooks/useAuth";
 
 export default function Navbar() {
+  const { logout } = useAuth();
   const [navi, setNavi] = useState(navigation);
   const { mode, toggleMode } = useMode();
   const user = getUser();

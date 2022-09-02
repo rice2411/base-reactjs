@@ -133,7 +133,9 @@ export default function Login() {
                 <p
                   ref={errRef}
                   className={`text-center ${
-                    touched.username ? "errmsg" : "offscreen"
+                    touched.username || touched.password || errMsg
+                      ? "errmsg"
+                      : "offscreen"
                   }`}
                   aria-live="assertive"
                 >
