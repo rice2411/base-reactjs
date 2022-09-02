@@ -31,7 +31,6 @@ export default function User() {
     setIsLoading(true);
     try {
       const response = await UserService.getUsers(param);
-      console.log(response);
       if (response?.data?.data) {
         setUsers(response?.data?.data);
         setPagination(response?.data?.paginate);
@@ -212,13 +211,13 @@ export default function User() {
                 Họ và tên
               </th>
               <th scope="col" className="py-3 px-6">
-                Position
+                Tên đăng nhập
               </th>
               <th scope="col" className="py-3 px-6">
-                Status
+                Trạng thái email
               </th>
               <th scope="col" className="py-3 px-6">
-                Action
+                Hành động
               </th>
             </tr>
           </thead>
@@ -261,22 +260,24 @@ export default function User() {
                       <img
                         className="w-10 h-10 rounded-full"
                         src={`${FILE_PATH + user?.avatar}`}
-                        alt="Jese image"
+                        alt={`${user?.username} avatar`}
                       />
                       <div className="pl-3">
                         <div className="text-base font-semibold">
                           {user?.firstname + " " + user?.lastname}
                         </div>
                         <div className="font-normal text-gray-500">
-                          {user?.email}
+                          {user?.email || "Tài khoản chưa đăng ký email"}
                         </div>
                       </div>
                     </th>
-                    <td className=" align-middle">React Developer</td>
+                    <td className="align-middle py-4 px-6 ">
+                      {user?.username}
+                    </td>
                     <td className="py-4 px-6 align-middle">
                       <div className="flex items-center">
                         <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2" />{" "}
-                        Online
+                        Đã xác thực
                       </div>
                     </td>
                     <td className="py-4 px-6 align-middle">

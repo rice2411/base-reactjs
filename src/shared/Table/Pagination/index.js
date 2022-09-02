@@ -72,7 +72,7 @@ export default function Pagination({
 
     for (let i = startPage; i <= endPage; ++i) {
       pagina.push(
-        <li>
+        <li key={i}>
           <a
             onClick={() => onPaginateChange(i)}
             class={`${
