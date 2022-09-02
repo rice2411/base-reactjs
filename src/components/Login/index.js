@@ -44,7 +44,7 @@ export default function Login() {
       setToken(token);
       setIsValidToken(true);
       setAuth({ token });
-
+      
       const userResponse = await UserService.getMe();
       if (userResponse?.data?.data) {
         setUser(userResponse?.data?.data);

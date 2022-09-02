@@ -1,18 +1,27 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import { setIsValidToken, setToken, setUser } from "../../utils/auth";  
 import AuthService from "../../service/auth";
+import UserService from "../../service/user";
 
 function Register() {
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [errMsg1, setErrMsg1] = useState("");
-  const [errMsg2, setErrMsg2] = useState("");
-  const [errMsg3, setErrMsg3] = useState("");
+  const [errMsgUserName, setErrMsgUserName] = useState("");
+  const [errMsgPwd, setErrMsgPwd] = useState("");
+  const [errMsgPwdConfirm, setErrMsgPwdConfirm] = useState("");
+  const [checkSubmit, setCheckSubmit] = useState(false);
 
   const userRef = useRef();
   const pwdRef = useRef();
+  const checkRef = useRef();
 
   useEffect(() => {
     userRef.current.focus();
@@ -22,9 +31,9 @@ function Register() {
   }, []);
 
   useEffect(() => {
-    setErrMsg1("");
-    setErrMsg2("");
-    setErrMsg3("");
+    setErrMsgUserName("");
+    setErrMsgPwd("");
+    setErrMsgPwdConfirm("");
   }, [username, password, passwordConfirm]);
 
   
@@ -32,41 +41,56 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(password.length < 4){
-        setErrMsg2("Mật khẩu phải dài hơn 3 ký tự!");
-        pwdRef.current.focus();
-    }
-    else if(password != passwordConfirm){
-        setErrMsg3("Mật khẩu xác nhận không đúng!");
-        pwdRef.current.focus();
-    }else{
-        const params = {
-            username: username,
-            password: password,
-        };
+    if(checkSubmit){
+      if(password.length < 4){
+          setErrMsgPwd("Mật khẩu phải dài hơn 3 ký tự!");
+          pwdRef.current.focus();
+      }
+      else if(password != passwordConfirm){
+          setErrMsgPwdConfirm("Mật khẩu xác nhận không đúng!");
+          pwdRef.current.focus();
+      }else{
+          const params = {
+              username: username,
+              password: password,
+          };
 
-        try {
-            const response = await AuthService.register(params);   
-        } catch (err) {
-          if (err?.response) {
-            setErrMsg1(err.response.data.message);
-            userRef.current.focus();
+          try {
+              const response = await AuthService.register(params);  
+
+              const res = await AuthService.login(params);
+
+              const { token } = res?.data?.data;
+
+              setToken(token);
+              setIsValidToken(true);
+              console.log(res?.data?.data)
+              const userResponse = await UserService.getMe();
+              if (userResponse?.data?.data) {
+                setUser(userResponse?.data?.data);
+              }
+
+              setUsername("");
+              setPassword("");
+              setPasswordConfirm("");
+
+              navigate(from, { replace: true });
+          } catch (err) {
+            if (err?.response) {
+              setErrMsgUserName(err.response.data.message);
+              userRef.current.focus();
+            }
           }
-        }
+      }
+    }else{
+      checkRef.current.focus();
     }
-
   };
   return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <a
-            href="#"
-            className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-          >
-            <img className="w-8 h-8 mr-2" src="/images/logo.png" alt="logo" />
-            React
-          </a>
+          
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -80,7 +104,12 @@ function Register() {
                   >
                     User name
                   </label>
-                  
+                  <p
+                    className={`mb-2 ml-2 text-sm font-light ${errMsgUserName ? "errmsg" : "offscreen"}`}
+                    aria-live="assertive"
+                  >
+                    {errMsgUserName}
+                  </p>
                   <input
                     type="text"
                     name="username"
@@ -102,10 +131,10 @@ function Register() {
                   </label>
                   <p
                     // ref={errRef}
-                    className={`mb-2 ml-2 text-sm font-light ${errMsg2 ? "errmsg" : "offscreen"}`}
+                    className={`mb-2 ml-2 text-sm font-light ${errMsgPwd ? "errmsg" : "offscreen"}`}
                     aria-live="assertive"
                   >
-                    {errMsg2}
+                    {errMsgPwd}
                   </p>
                   <input
                     type="password"
@@ -128,10 +157,10 @@ function Register() {
                   </label>
                   <p
                     // ref={errRef}
-                    className={`mb-2 ml-2 text-sm font-light ${errMsg3 ? "errmsg" : "offscreen"}`}
+                    className={`mb-2 ml-2 text-sm font-light ${errMsgPwdConfirm ? "errmsg" : "offscreen"}`}
                     aria-live="assertive"
                   >
-                    {errMsg3}
+                    {errMsgPwdConfirm}
                   </p>
                   <input
                     type="password"
@@ -144,12 +173,7 @@ function Register() {
                     value={passwordConfirm}
                   />
                 </div>
-                <p
-                    className={`text-center ${errMsg1 ? "errmsg" : "offscreen"}`}
-                    aria-live="assertive"
-                  >
-                    {errMsg1}
-                  </p>
+                
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
                     <input
@@ -158,6 +182,9 @@ function Register() {
                       type="checkbox"
                       className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
                       required=""
+                      checked = {checkSubmit}
+                      onChange = {()=> setCheckSubmit(!checkSubmit)}
+                      ref = {checkRef}
                     />
                   </div>
                   <div className="ml-3 text-sm">
