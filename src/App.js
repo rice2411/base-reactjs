@@ -13,12 +13,6 @@ import "./styles/global/_global.css";
 import PersistLogin from "./helper/persistLogin";
 
 export default function App() {
-  const ROLES = {
-    User: 2001,
-    Editor: 1984,
-    Admin: 5150,
-  };
-
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
