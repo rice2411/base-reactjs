@@ -1,0 +1,111 @@
+import React, { useEffect, useState } from "react";
+
+export default function Pagination({
+  fetchData,
+  paginate,
+  setIsLoading = null,
+  params,
+  scrollTo = false,
+}) {
+  const [pagination, setPagination] = useState(null);
+  const [pageNeighbours, setPageNeighbours] = useState(3);
+
+  function fetchPagination(currentPage) {
+    let pagina = [];
+    let startPage = Math.max(1, currentPage - pageNeighbours);
+    let endPage = Math.min(
+      paginate?.totalPages || 1,
+      currentPage + pageNeighbours
+    );
+    const totalNumbers = pageNeighbours * 2 + 3;
+
+    if (currentPage - startPage < pageNeighbours) {
+      endPage = Math.min(
+        paginate?.totalPages || 1,
+        endPage + pageNeighbours - (currentPage - startPage) + 1
+      );
+    }
+    if (endPage - currentPage < pageNeighbours) {
+      startPage = Math.max(
+        1,
+        startPage - (pageNeighbours - (endPage - currentPage)) - 1
+      );
+    }
+
+    if (startPage > 1) {
+      pagina.push(
+        <li>
+          <a
+            href="#"
+            class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            <span class="sr-only">Previous</span>
+            <svg
+              aria-hidden="true"
+              class="w-5 h-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </a>
+        </li>
+      );
+    }
+
+    for (let i = startPage; i <= endPage; ++i) {
+      pagina.push(
+        <li>
+          <a
+            href="#"
+            class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            {i}
+          </a>
+        </li>
+      );
+    }
+
+    if (paginate?.totalPages - endPage >= 1)
+      pagina.push(
+        <li>
+          <a
+            href="#"
+            class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            <span class="sr-only">Next</span>
+            <svg
+              aria-hidden="true"
+              class="w-5 h-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </a>
+        </li>
+      );
+
+    setPagination(pagina);
+  }
+
+  useEffect(() => {
+    fetchPagination(paginate?.page || 1);
+  }, [paginate]);
+
+  return (
+    <nav aria-label="Page navigation example">
+      <ul class="inline-flex items-center -space-x-px">{pagination}</ul>
+    </nav>
+  );
+}

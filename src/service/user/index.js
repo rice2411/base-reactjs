@@ -7,9 +7,9 @@ const router = {
 };
 
 class UserService {
-  static getUsers() {
+  static getUsers(param) {
     let uri = router.get_all;
-    return fetch.get(uri);
+    return fetch.get(uri, param);
   }
   static getMe() {
     let uri = router.get_me;
