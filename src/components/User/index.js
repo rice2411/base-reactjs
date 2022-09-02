@@ -4,6 +4,7 @@ import UserService from "../../service/user";
 import { debounce } from "lodash";
 import Pagination from "../../shared/Table/Pagination";
 import Loading from "../../shared/Animations/Loading";
+import { PAGINATE } from "../../constant/paginate";
 
 export default function User() {
   const actionListRef = useRef(null);
@@ -12,8 +13,43 @@ export default function User() {
   const [contentSearch, setContentSearch] = useState("");
   const params = {
     page: 1,
-    limit: 10,
+    limit: PAGINATE.limit,
     search: contentSearch || "",
+  };
+  const [pagination, setPagination] = useState({
+    limit: 10,
+    page: 0,
+    totalDocs: 0,
+    totalPages: 0,
+  });
+
+  const fetchUsers = async (params) => {
+    const param = {
+      ...params,
+      search: params.search || "",
+    };
+    setIsLoading(true);
+    try {
+      const response = await UserService.getUsers(param);
+      console.log(response);
+      if (response?.data?.data) {
+        setUsers(response?.data?.data);
+        setPagination(response?.data?.paginate);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleShowAction = () => {
+    if (actionListRef.current.classList.contains("hidden")) {
+      actionListRef.current.classList.remove("hidden");
+      actionListRef.current.classList.add("block");
+    } else {
+      actionListRef.current.classList.remove("block");
+      actionListRef.current.classList.add("hidden");
+    }
   };
   const handleChangeSearch = (e) => {
     setContentSearch(e.target.value);
@@ -29,41 +65,6 @@ export default function User() {
     }, 400),
     []
   );
-  const [pagination, setPagination] = useState({
-    limit: 10,
-    page: 0,
-    totalDocs: 0,
-    totalPages: 0,
-  });
-
-  const handleShowAction = () => {
-    if (actionListRef.current.classList.contains("hidden")) {
-      actionListRef.current.classList.remove("hidden");
-      actionListRef.current.classList.add("block");
-    } else {
-      actionListRef.current.classList.remove("block");
-      actionListRef.current.classList.add("hidden");
-    }
-  };
-  const fetchUsers = async (params) => {
-    const param = {
-      ...params,
-      search: params.search || "",
-    };
-    setIsLoading(true);
-    try {
-      const response = await UserService.getUsers(param);
-      console.log(params);
-      if (response?.data?.data) {
-        setUsers(response?.data?.data);
-        setPagination(response?.data?.paginate);
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   useEffect(() => {
     fetchUsers(params);
     setContentSearch("");
@@ -222,13 +223,14 @@ export default function User() {
             </tr>
           </thead>
           {isLoading ? (
-            <div className="flex justify-center items-center">
-              <Loading />
-            </div>
+            <tr className="text-center">
+              <td colSpan={6} className="py-4 px-6">
+                <Loading />
+              </td>
+            </tr>
           ) : (
             <tbody>
-              {users &&
-                users?.length &&
+              {users && users?.length ? (
                 users.map((user, index) => (
                   <tr
                     key={user?._id}
@@ -250,7 +252,7 @@ export default function User() {
                       </div>
                     </td>
                     <th className="py-4 px-6 align-middle">
-                      {10 * (pagination?.page - 1) + index + 1}
+                      {PAGINATE.limit * (pagination?.page - 1) + index + 1}
                     </th>
                     <th
                       scope="row"
@@ -270,7 +272,7 @@ export default function User() {
                         </div>
                       </div>
                     </th>
-                    <td className="py-4 px-6 align-middle">React Developer</td>
+                    <td className=" align-middle">React Developer</td>
                     <td className="py-4 px-6 align-middle">
                       <div className="flex items-center">
                         <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2" />{" "}
@@ -286,7 +288,15 @@ export default function User() {
                       </a>
                     </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr className="text-center">
+                  <td colSpan={6} className="py-4 px-6">
+                    {" "}
+                    "Hiện không có dữ liệu phù hợp"
+                  </td>
+                </tr>
+              )}
             </tbody>
           )}
         </table>
