@@ -5,11 +5,14 @@ import { debounce } from "lodash";
 import Pagination from "../../shared/Table/Pagination";
 import Loading from "../../shared/Animations/Loading";
 import { PAGINATE } from "../../constant/paginate";
+import ModalTest from "../../small_components/Modal";
+import { BodyContent, HeaderContent } from "./Edit";
 
 export default function User() {
   const actionListRef = useRef(null);
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
   const [contentSearch, setContentSearch] = useState("");
   const params = {
     page: 1,
@@ -41,6 +44,12 @@ export default function User() {
       setIsLoading(false);
     }
   };
+
+  const handleOpenModalCreateUser = () => {
+    setIsOpenModalCreate(true);
+    handleShowAction();
+  };
+
   const handleShowAction = () => {
     if (actionListRef.current.classList.contains("hidden")) {
       actionListRef.current.classList.remove("hidden");
@@ -74,7 +83,7 @@ export default function User() {
       <h2
         className={` mb-5 text-3xl font-extrabold tracking-tight sm:text-4xl text-gray-900 dark:text-white`}
       >
-        Users
+        Danh sách người dùng
       </h2>
       <div className="overflow-x-auto relative shadow-2xl sm:rounded-lg">
         <div className="flex justify-between items-center pb-4 bg-white dark:bg-gray-900">
@@ -88,7 +97,7 @@ export default function User() {
               type="button"
             >
               <span className="sr-only">Action button</span>
-              Action
+              Hành động
               <svg
                 className="ml-2 w-3 h-3"
                 aria-hidden="true"
@@ -125,26 +134,10 @@ export default function User() {
               >
                 <li>
                   <a
-                    href="#"
+                    onClick={() => handleOpenModalCreateUser()}
                     className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >
-                    Reward
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Promote
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Activate account
+                    Thêm người dùng
                   </a>
                 </li>
               </ul>
@@ -153,13 +146,13 @@ export default function User() {
                   href="#"
                   className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
-                  Delete User
+                  Xoá người dùng
                 </a>
               </div>
             </div>
           </div>
           <label htmlFor="table-search" className="sr-only">
-            Search
+            Tìm kiếm người dùng
           </label>
           <div className="relative">
             <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -181,7 +174,7 @@ export default function User() {
               type="text"
               id="table-search-users"
               className="block p-2 pl-10 w-80 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search for users"
+              placeholder="Nhấn vào đây để tìm kiếm.."
               value={contentSearch || ""}
               onChange={handleChangeSearch}
             />
@@ -311,6 +304,15 @@ export default function User() {
             params={params}
           />
         )}
+      </div>
+      <div className="mt-10">
+        <ModalTest
+          isOpen={isOpenModalCreate}
+          setClose={setIsOpenModalCreate}
+          HeaderContent={HeaderContent}
+          BodyContent={BodyContent}
+          buttonText={["Cập nhật", "Huỷ"]}
+        />
       </div>
     </div>
   );

@@ -1,8 +1,11 @@
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
   theme: {
     extend: {},
   },
   darkMode: "class",
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [require("flowbite/plugin"), require("@tailwindcss/forms")],
 };
