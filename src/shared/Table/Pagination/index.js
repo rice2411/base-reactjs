@@ -27,6 +27,7 @@ export default function Pagination({
       paginate?.totalPages || 1,
       currentPage + pageNeighbours
     );
+
     const totalNumbers = pageNeighbours * 2 + 3;
 
     if (currentPage - startPage < pageNeighbours) {
@@ -49,12 +50,12 @@ export default function Pagination({
             onClick={() =>
               fetchPagination(currentPage - 2 * pageNeighbours - 1)
             }
-            class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
-            <span class="sr-only">Previous</span>
+            <span className="sr-only">Previous</span>
             <svg
               aria-hidden="true"
-              class="w-5 h-5"
+              className="w-5 h-5"
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -75,8 +76,10 @@ export default function Pagination({
         <li key={i}>
           <a
             onClick={() => onPaginateChange(i)}
-            class={`${
-              paginate?.page == i ? "active" : ""
+            className={`${
+              paginate?.page == i
+                ? "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-white"
+                : ""
             } py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
           >
             {i}
@@ -92,12 +95,12 @@ export default function Pagination({
             onClick={() =>
               fetchPagination(currentPage + 2 * pageNeighbours + 1)
             }
-            class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            className="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
-            <span class="sr-only">Next</span>
+            <span className="sr-only">Next</span>
             <svg
               aria-hidden="true"
-              class="w-5 h-5"
+              className="w-5 h-5"
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +114,7 @@ export default function Pagination({
           </a>
         </li>
       );
-
+    console.log(pagina);
     setPagination(pagina);
   }
 
@@ -121,7 +124,7 @@ export default function Pagination({
 
   return (
     <nav aria-label="Page navigation example">
-      <ul class="inline-flex items-center -space-x-px">{pagination}</ul>
+      <ul className="inline-flex items-center -space-x-px">{pagination}</ul>
     </nav>
   );
 }
