@@ -5,12 +5,13 @@ import { debounce } from "lodash";
 import Pagination from "../../shared/Table/Pagination";
 import Loading from "../../shared/Animations/Loading";
 import { PAGINATE } from "../../constant/paginate";
-import ModalTest from "../../small_components/Modal";
-import { BodyContent, HeaderContent } from "./Edit";
+import Modal from "../../small_components/Modal";
+import EditUserModal, { BodyContent, HeaderContent } from "./Edit";
 
 export default function User() {
   const actionListRef = useRef(null);
   const [users, setUsers] = useState([]);
+  const [userSelected, setUserSelected] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
   const [contentSearch, setContentSearch] = useState("");
@@ -45,11 +46,21 @@ export default function User() {
     }
   };
 
-  const handleOpenModalCreateUser = () => {
+  const handleOpenModalCreateUser = (user) => {
+    setUserSelected(user);
     setIsOpenModalCreate(true);
     handleShowAction();
   };
-
+  const handleClickOutSideAction = (e) => {
+    if (
+      actionListRef.current &&
+      actionListRef.current.classList.contains("block") &&
+      !actionListRef.current.contains(e.target)
+    ) {
+      actionListRef.current.classList.remove("block");
+      actionListRef.current.classList.add("hidden");
+    }
+  };
   const handleShowAction = () => {
     if (actionListRef.current.classList.contains("hidden")) {
       actionListRef.current.classList.remove("hidden");
@@ -76,6 +87,7 @@ export default function User() {
   useEffect(() => {
     fetchUsers(params);
     setContentSearch("");
+    document.addEventListener("mousedown", handleClickOutSideAction);
   }, []);
 
   return (
@@ -117,6 +129,7 @@ export default function User() {
             {/* Dropdown menu */}
             <div
               ref={actionListRef}
+              onBlur={() => handleShowAction()}
               className="z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 hidden"
               style={{
                 position: "absolute",
@@ -133,10 +146,7 @@ export default function User() {
                 aria-labelledby="dropdownActionButton"
               >
                 <li>
-                  <a
-                    onClick={() => handleOpenModalCreateUser()}
-                    className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
+                  <a className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                     Thêm người dùng
                   </a>
                 </li>
@@ -275,10 +285,10 @@ export default function User() {
                     </td>
                     <td className="py-4 px-6 align-middle">
                       <a
-                        href="#"
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        onClick={() => handleOpenModalCreateUser(user)}
+                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline hover:cursor-pointer "
                       >
-                        Edit user
+                        Chỉnh sửa
                       </a>
                     </td>
                   </tr>
@@ -306,13 +316,13 @@ export default function User() {
         )}
       </div>
       <div className="mt-10">
-        <ModalTest
+        <Modal
           isOpen={isOpenModalCreate}
           setClose={setIsOpenModalCreate}
-          HeaderContent={HeaderContent}
-          BodyContent={BodyContent}
           buttonText={["Cập nhật", "Huỷ"]}
-        />
+        >
+          <EditUserModal user={userSelected} />
+        </Modal>
       </div>
     </div>
   );
