@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import { AuthProvider } from "./context/auth";
 import { ModeProvider } from "./context/mode";
+import { ModalProvider } from "./context/modal";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 if (process.env.NODE_ENV === "production") {
@@ -13,13 +14,15 @@ if (process.env.NODE_ENV === "production") {
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-        <AuthProvider>
-          <ModeProvider>
+      <AuthProvider>
+        <ModeProvider>
+          <ModalProvider>
             <Routes>
               <Route path="/*" element={<App />} />
             </Routes>
-          </ModeProvider>
-        </AuthProvider>
+          </ModalProvider>
+        </ModeProvider>
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

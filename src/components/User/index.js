@@ -12,6 +12,7 @@ export default function User() {
   const actionListRef = useRef(null);
   const [users, setUsers] = useState([]);
   const [userSelected, setUserSelected] = useState({});
+  const [isFetchData, setIsFetchData] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
   const [contentSearch, setContentSearch] = useState("");
@@ -87,6 +88,8 @@ export default function User() {
   useEffect(() => {
     fetchUsers(params);
     setContentSearch("");
+  }, [isFetchData]);
+  useEffect(() => {
     document.addEventListener("mousedown", handleClickOutSideAction);
   }, []);
 
@@ -316,12 +319,12 @@ export default function User() {
         )}
       </div>
       <div className="mt-10">
-        <Modal
-          isOpen={isOpenModalCreate}
-          setClose={setIsOpenModalCreate}
-          buttonText={["Cập nhật", "Huỷ"]}
-        >
-          <EditUserModal user={userSelected} />
+        <Modal isOpen={isOpenModalCreate} setClose={setIsOpenModalCreate}>
+          <EditUserModal
+            user={userSelected}
+            setClose={setIsOpenModalCreate}
+            setIsFetchData={setIsFetchData}
+          />
         </Modal>
       </div>
     </div>
