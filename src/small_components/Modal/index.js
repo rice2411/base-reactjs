@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import { Modal, TextInput, Checkbox, Label, Button } from "flowbite-react";
+import {
+  Modal as ModalDefault,
+  TextInput,
+  Checkbox,
+  Label,
+  Button,
+} from "flowbite-react";
 
-export default function ModalTest({
-  isOpen,
-  setClose,
-  HeaderContent,
-  BodyContent,
-  buttonText,
-}) {
+export default function Modal({ isOpen, setClose, buttonText, ...props }) {
   const handleRemoveModalClass = () => {
     const modal = document.getElementById("modal");
     modal?.classList?.remove("items-center");
@@ -27,19 +27,14 @@ export default function ModalTest({
   }, [isOpen]);
 
   return (
-    <Modal
+    <ModalDefault
       id="modal"
       show={isOpen}
       size="xl"
       onClose={() => handleCloseModal()}
     >
-      <Modal.Header>
-        <HeaderContent />
-      </Modal.Header>
-      <Modal.Body>
-        <BodyContent />
-      </Modal.Body>
-      <Modal.Footer>
+      {props.children}
+      <ModalDefault.Footer>
         <div className="px-6 flex ml-auto">
           <Button onClick={() => handleCloseModal()}>
             {buttonText[0] || "Đồng ý"}
@@ -50,7 +45,7 @@ export default function ModalTest({
             </Button>
           </div>
         </div>
-      </Modal.Footer>
-    </Modal>
+      </ModalDefault.Footer>
+    </ModalDefault>
   );
 }
