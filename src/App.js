@@ -8,18 +8,12 @@ import NotFoundPage from "./pages/error/404";
 import RequireAuth from "./helper/requireAuth";
 import LayoutPage from "./pages/layout";
 import UserPage from "./pages/user";
+import PersistLogin from "./helper/persistLogin";
 
 // import "./styles/_reset.scss";
 import "./styles/global/_global.css";
-import PersistLogin from "./helper/persistLogin";
 
 export default function App() {
-  const ROLES = {
-    User: 2001,
-    Editor: 1984,
-    Admin: 5150,
-  };
-
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />

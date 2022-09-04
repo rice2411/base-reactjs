@@ -1,4 +1,4 @@
-import Axios from "../shared/axios";
+import Axios from "../service/shared/axios";
 import axios from "axios";
 import cookie from "js-cookie";
 export function convertToQueryString(params) {

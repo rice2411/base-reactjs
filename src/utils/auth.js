@@ -33,33 +33,3 @@ export function getUser() {
   }
   return "";
 }
-export const logout = async () => {
-  cookies.remove("token");
-  cookies.remove("isValid");
-  window.location.href = "/login";
-};
-export const isLogin = async () => {
-  const token = getToken();
-  let isValidToken = null;
-  const currentPath = window.location.href;
-  if (token) {
-    isValidToken = await verifyToken();
-  }
-  if (isValidToken != null) {
-    if (currentPath.includes("/login")) window.location.href = "/dashboard";
-  } else {
-    if (!currentPath.includes("/login")) window.location.href = "/login";
-  }
-};
-export const verifyToken = async () => {
-  const token = getToken();
-  try {
-    await AuthService.verify();
-    setIsValidToken(true);
-    return token;
-  } catch (err) {
-    setIsValidToken(false);
-    console.log(err.message);
-    return null;
-  }
-};
