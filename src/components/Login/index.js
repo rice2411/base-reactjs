@@ -1,7 +1,7 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { Formik, Form, Field } from "formik";
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import AuthService from "../../service/auth";
 import UserService from "../../service/user";
@@ -67,25 +67,20 @@ export default function Login() {
 
   return (
     <>
-      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ">
         <div className="max-w-md w-full space-y-8">
           <div>
-            <img
-              className="mx-auto h-12 w-auto"
-              src="/images/logo.png"
-              alt="React"
-            />
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Sign in to your account
+            Đăng nhập
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
-              Or{" "}
-              <a
-                href="12"
+              hoặc{" "}
+              <Link
+                to={"/register"}
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                sign up here
-              </a>
+                Đăng ký
+              </Link>
             </p>
           </div>
           <Formik
@@ -101,7 +96,7 @@ export default function Login() {
                 <div className="rounded-md shadow-sm -space-y-px">
                   <div>
                     <label htmlFor="username" className="sr-only">
-                      User Name
+                      Tên đăng nhập
                     </label>
                     <Field
                       id="username"
@@ -110,13 +105,13 @@ export default function Login() {
                       autoComplete="username"
                       required
                       className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="User name"
+                      placeholder="Tên đăng nhập"
                       onChange={handleChange}
                     />
                   </div>
                   <div>
                     <label htmlFor="password" className="sr-only">
-                      Password
+                      Mật khẩu
                     </label>
                     <Field
                       id="password"
@@ -125,7 +120,7 @@ export default function Login() {
                       autoComplete="current-password"
                       required
                       className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Password"
+                      placeholder="Mật khẩu"
                       onChange={handleChange}
                     />
                   </div>
@@ -166,7 +161,7 @@ export default function Login() {
                       href="12"
                       className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
-                      Forgot your password?
+                      Quên mật khẩu?
                     </a>
                   </div>
                 </div>
@@ -183,7 +178,7 @@ export default function Login() {
                         aria-hidden="true"
                       />
                     </span>
-                    Sign in
+                    Đăng nhập
                   </button>
                 </div>
               </Form>
