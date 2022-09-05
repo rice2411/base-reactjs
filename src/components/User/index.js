@@ -10,6 +10,7 @@ import EditUserModal, { BodyContent, HeaderContent } from "./Edit";
 
 export default function User() {
   const actionListRef = useRef(null);
+  const actionListButtonRef = useRef(null);
   const [users, setUsers] = useState([]);
   const [userSelected, setUserSelected] = useState({});
   const [isFetchData, setIsFetchData] = useState(false);
@@ -54,6 +55,7 @@ export default function User() {
   };
   const handleClickOutSideAction = (e) => {
     if (
+      e.target !== actionListButtonRef.current &&
       actionListRef.current &&
       actionListRef.current.classList.contains("block") &&
       !actionListRef.current.contains(e.target)
@@ -104,6 +106,7 @@ export default function User() {
         <div className="flex justify-between items-center pb-4 bg-white dark:bg-gray-900">
           <div>
             <button
+              ref={actionListButtonRef}
               onClick={() => {
                 handleShowAction();
               }}
@@ -149,7 +152,9 @@ export default function User() {
                 aria-labelledby="dropdownActionButton"
               >
                 <li>
-                  <a className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                  <a
+                    href="#" 
+                    className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                     Thêm người dùng
                   </a>
                 </li>
