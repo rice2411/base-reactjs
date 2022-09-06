@@ -8,6 +8,7 @@ import { PAGINATE } from "../../constant/paginate";
 import Modal from "../../small_components/Modal";
 import EditUserModal, { BodyContent, HeaderContent } from "./Edit";
 import useModal from "../../hooks/useModal";
+import * as XLSX from "xlsx/xlsx.mjs";
 
 export default function User() {
   const { handleOpenConfirm, handleOpenAlertError } = useModal();
@@ -49,6 +50,12 @@ export default function User() {
     } finally {
       setIsLoading(false);
     }
+  };
+  const handleExportExcel = () => {
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.json_to_sheet(users);
+    XLSX.utils.book_append_sheet(wb, ws, "Danh Sách Người Dùng");
+    XLSX.writeFile(wb, "Danh Sách Người Dùng.xlsx");
   };
   const handleSelectAllUsers = (e) => {
     const check = e.target.checked;
@@ -153,104 +160,106 @@ export default function User() {
       >
         Danh sách người dùng
       </h2>
-      <div className="overflow-x-auto relative shadow-2xl sm:rounded-lg">
-        <div className="flex justify-between items-center pb-4 bg-white dark:bg-gray-900">
-          <div>
-            <button
-              ref={actionListButtonRef}
-              onClick={() => {
-                handleShowAction();
-              }}
-              data-dropdown-toggle="dropdownAction"
-              className="inline-flex items-center text-gray-500 bg-white border border-gray-300  hover:bg-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 "
-              type="button"
+
+      <div className="flex justify-between items-center  mb-4 bg-white dark:bg-gray-900 relative">
+        <div>
+          <button
+            ref={actionListButtonRef}
+            onClick={() => {
+              handleShowAction();
+            }}
+            data-dropdown-toggle="dropdownAction"
+            className="inline-flex items-center text-gray-500 bg-white border border-gray-300  hover:bg-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 "
+            type="button"
+          >
+            <span className="sr-only">Action button</span>
+            Hành động
+            <svg
+              className="ml-2 w-3 h-3"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <span className="sr-only">Action button</span>
-              Hành động
-              <svg
-                className="ml-2 w-3 h-3"
-                aria-hidden="true"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-            {/* Dropdown menu */}
-            <div
-              ref={actionListRef}
-              onBlur={() => handleShowAction()}
-              className="z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 hidden"
-              style={{
-                position: "absolute",
-                inset: "0px auto auto 0px",
-                margin: 0,
-                transform: "translate3d(0px, 46.4px, 0px)",
-              }}
-              data-popper-reference-hidden=""
-              data-popper-escaped=""
-              data-popper-placement="bottom"
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+          {/* Dropdown menu */}
+          <div
+            ref={actionListRef}
+            onBlur={() => handleShowAction()}
+            className="z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 hidden"
+            style={{
+              position: "absolute",
+              inset: "0px auto auto 0px",
+              margin: 0,
+              transform: "translate3d(0px, 46.4px, 0px)",
+            }}
+            data-popper-reference-hidden=""
+            data-popper-escaped=""
+            data-popper-placement="bottom"
+          >
+            <ul
+              className="py-1 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdownActionButton"
             >
-              <ul
-                className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownActionButton"
-              >
-                <li>
-                  <a
-                    href="#" 
-                    className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    Thêm người dùng
-                  </a>
-                </li>
-              </ul>
-              <div className="py-1">
+              <li>
                 <a
-                  onClick={() => {
-                    handleDeactiveUser();
-                  }}
-                  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  onClick={() => handleExportExcel()}
+                  className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >
-                  Xoá người dùng
+                  Xuất excel
                 </a>
-              </div>
-            </div>
-          </div>
-          <label htmlFor="table-search" className="sr-only">
-            Tìm kiếm người dùng
-          </label>
-          <div className="relative">
-            <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-              <svg
-                className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+              </li>
+            </ul>
+            <div className="py-1">
+              <a
+                onClick={() => {
+                  handleDeactiveUser();
+                }}
+                className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                />
-              </svg>
+                Xoá người dùng
+              </a>
             </div>
-            <input
-              type="text"
-              id="table-search-users"
-              className="block p-2 pl-10 w-80 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Nhấn vào đây để tìm kiếm.."
-              value={contentSearch || ""}
-              onChange={handleChangeSearch}
-            />
           </div>
         </div>
+        <label htmlFor="table-search" className="sr-only">
+          Tìm kiếm người dùng
+        </label>
+        <div className="relative">
+          <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+            <svg
+              className="w-5 h-5 text-gray-500 dark:text-gray-400"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="table-search-users"
+            className="block p-2 pl-10 w-80 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Nhấn vào đây để tìm kiếm.."
+            value={contentSearch || ""}
+            onChange={handleChangeSearch}
+          />
+        </div>
+      </div>
+      <div className="overflow-x-auto relative shadow-2xl  sm:rounded-lg">
         <table className="w-full text-sm text-left align-middle text-gray-500 dark:text-gray-400 ">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
