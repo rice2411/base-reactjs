@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FILE_PATH } from "../../constant/staticPath";
+import { FILE_PATH } from "../../constant/image";
 import UserService from "../../service/user";
 import { debounce } from "lodash";
 import Pagination from "../../shared/Table/Pagination";
@@ -7,11 +7,14 @@ import Loading from "../../shared/Animations/Loading";
 import { PAGINATE } from "../../constant/paginate";
 import Modal from "../../small_components/Modal";
 import EditUserModal, { BodyContent, HeaderContent } from "./Edit";
+import useModal from "../../hooks/useModal";
 
 export default function User() {
+  const { handleOpenConfirm, handleOpenAlertError } = useModal();
   const actionListRef = useRef(null);
   const [users, setUsers] = useState([]);
-  const [userSelected, setUserSelected] = useState({});
+  const [userEdit, setUserEdit] = useState({});
+  const [usersSelected, setUsersSelected] = useState([]);
   const [isFetchData, setIsFetchData] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
@@ -46,9 +49,54 @@ export default function User() {
       setIsLoading(false);
     }
   };
-
+  const handleSelectAllUsers = (e) => {
+    const check = e.target.checked;
+    if (check) {
+      let listUserId = [];
+      users.map((user) => {
+        listUserId.push(user._id);
+      });
+      setUsersSelected(listUserId);
+    } else {
+      setUsersSelected([]);
+    }
+  };
+  const handleSelectUsers = (e, userId) => {
+    const check = e.target.checked;
+    let currentListUser = [...usersSelected];
+    console.log(currentListUser);
+    if (check) {
+      currentListUser.push(userId);
+      setUsersSelected(currentListUser);
+    } else {
+      const index = currentListUser.indexOf(userId);
+      if (index > -1) {
+        currentListUser.splice(index, 1);
+        setUsersSelected(currentListUser);
+      }
+    }
+  };
+  const handleDeactiveUser = () => {
+    if (usersSelected.length) {
+      let text = "Bạn có muốn xoá những người dùng này?";
+      handleOpenConfirm(text, onDeactiveUser);
+    } else {
+      handleOpenAlertError("Vui lòng chọn người dùng");
+    }
+  };
+  const onDeactiveUser = async () => {
+    const param = {
+      listUserId: usersSelected,
+    };
+    try {
+      const response = await UserService.deactiveUsers(param);
+      setIsFetchData((preState) => !preState);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const handleOpenModalCreateUser = (user) => {
-    setUserSelected(user);
+    setUserEdit(user);
     setIsOpenModalCreate(true);
     handleShowAction();
   };
@@ -91,6 +139,9 @@ export default function User() {
   }, [isFetchData]);
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutSideAction);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutSideAction);
+    };
   }, []);
 
   return (
@@ -156,7 +207,9 @@ export default function User() {
               </ul>
               <div className="py-1">
                 <a
-                  href="#"
+                  onClick={() => {
+                    handleDeactiveUser();
+                  }}
                   className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
                   Xoá người dùng
@@ -199,6 +252,7 @@ export default function User() {
               <th scope="col" className="p-4">
                 <div className="flex items-center">
                   <input
+                    onChange={(e) => handleSelectAllUsers(e)}
                     id="checkbox-all-search"
                     type="checkbox"
                     className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -244,8 +298,10 @@ export default function User() {
                     <td className="p-4 w-4 align-middle">
                       <div className="flex items-center">
                         <input
+                          onChange={(e) => handleSelectUsers(e, user._id)}
                           id="checkbox-table-search-1"
                           type="checkbox"
+                          checked={usersSelected.includes(user._id)}
                           className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         />
                         <label
@@ -321,7 +377,7 @@ export default function User() {
       <div className="mt-10">
         <Modal isOpen={isOpenModalCreate} setClose={setIsOpenModalCreate}>
           <EditUserModal
-            user={userSelected}
+            user={userEdit}
             setClose={setIsOpenModalCreate}
             setIsFetchData={setIsFetchData}
           />

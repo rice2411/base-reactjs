@@ -1,11 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Modal as ModalDefault,
-  TextInput,
-  Checkbox,
-  Label,
-  Button,
-} from "flowbite-react";
+import { Modal as ModalDefault } from "flowbite-react";
 
 export const handleCloseModal = (setClose) => {
   document.documentElement.classList.remove("overflow-hidden");
