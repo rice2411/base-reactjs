@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import {
   Modal as ModalDefault,
@@ -7,27 +7,45 @@ import {
   Label,
   Button,
 } from "flowbite-react";
-import { FILE_PATH } from "../../../constant/staticPath";
+import { DEFAULT_AVATAR, FILE_PATH } from "../../../constant/image";
 import { User } from "../../../model/user";
 import { handleCloseModal } from "../../../small_components/Modal";
 import UserService from "../../../service/user";
-import Alert from "../../../small_components/Alert";
 import useModal from "../../../hooks/useModal";
+
 export default function EditUserModal({ user, setClose, setIsFetchData }) {
-  const { handleOpenAlertSucess } = useModal();
+  const { handleOpenAlertSucess, handleOpenAlertError } = useModal();
+  const [fileUpload, setFileUpload] = useState({});
+  const avatarRef = useRef(null);
+  const avatarUploadRef = useRef(null);
   const handleFinishUpdate = () => {
     setIsFetchData((preState) => !preState);
   };
+  const handleChangeAvatar = async (e, setFieldValue) => {
+    const file = e.currentTarget.files[0];
+    const src = URL.createObjectURL(file);
+    avatarRef.current.src = src;
+    setFieldValue("file", file);
+    setFileUpload(file);
+  };
+
   const handleUpdateUser = async (values) => {
     let userParam = new User();
     userParam._id = user._id;
-    let param = userParam.toRequestUpdate(values);
+    const param = userParam.toRequestUpdate(values);
+    const formData = new FormData();
+    formData.append("files", fileUpload);
+    for (var key in param) {
+      formData.append(key, param[key]);
+    }
+
     try {
-      const response = await UserService.updateUser(param._id, param);
+      const response = await UserService.updateUser(param._id, formData);
       handleOpenAlertSucess("Cập nhật thành công", handleFinishUpdate);
       handleCloseModal(setClose);
+      avatarUploadRef.current.value = "";
     } catch (err) {
-      console.log(err);
+      handleOpenAlertError(err?.response?.data?.message);
     }
   };
   return (
@@ -45,6 +63,8 @@ export default function EditUserModal({ user, setClose, setIsFetchData }) {
           lastname: user?.lastname || "",
           email: user?.email || "",
           phoneNumber: user?.phoneNumber || "",
+          avatar: user?.avatar || DEFAULT_AVATAR,
+          file: null,
         }}
         // validationSchema={loginSchema()}
         onSubmit={handleUpdateUser}
@@ -52,12 +72,13 @@ export default function EditUserModal({ user, setClose, setIsFetchData }) {
       >
         {({ errors, touched, values, setFieldValue, handleChange }) => (
           <>
-            <Form>
+            <Form encType="multipart/form-data">
               <ModalDefault.Body>
                 <div className="p-6 space-y-6">
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-12 sm:col-span-6 flex justify-center">
                       <img
+                        ref={avatarRef}
                         className="w-40 h-40 rounded-full"
                         src={FILE_PATH + user?.avatar || "/images/avatar.jpg"}
                         alt="Rounded avatar"
@@ -73,10 +94,15 @@ export default function EditUserModal({ user, setClose, setIsFetchData }) {
                     </div>
                     <div className="col-span-12 sm:col-span-6 flex justify-center">
                       <input
+                        ref={avatarUploadRef}
                         className="block mb-5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                         id="small_size"
                         type="file"
-                      ></input>
+                        name="file"
+                        onChange={(e) => {
+                          handleChangeAvatar(e, setFieldValue);
+                        }}
+                      />
                     </div>
 
                     <div className="col-span-6 sm:col-span-3">
@@ -164,7 +190,6 @@ export default function EditUserModal({ user, setClose, setIsFetchData }) {
           </>
         )}
       </Formik>
-      <Alert />
     </>
   );
 }

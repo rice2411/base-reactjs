@@ -5,7 +5,7 @@ export class User {
   username;
   role;
   password;
-  avatar;
+  avatarUpload;
   is_active;
   email;
   phoneNumber;
@@ -14,6 +14,7 @@ export class User {
     this.lastname = param.lastname;
     this.email = param.email;
     this.phoneNumber = param.phoneNumber;
+
     return this;
   }
 }
