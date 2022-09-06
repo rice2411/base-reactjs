@@ -13,7 +13,7 @@ import { classNames } from "./helper";
 import { Link } from "react-router-dom";
 
 import { getUser } from "../../../utils/auth";
-import { FILE_PATH } from "../../../constant/staticPath";
+import { FILE_PATH } from "../../../constant/image";
 import useMode from "../../../hooks/useMode";
 import useAuth from "../../../hooks/useAuth";
 
