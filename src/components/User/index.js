@@ -21,7 +21,7 @@ export default function User() {
   const [userEdit, setUserEdit] = useState({});
   const [usersSelected, setUsersSelected] = useState([]);
   const [isFetchData, setIsFetchData] = useState(false);
-  const [isSelectAll, seteIsSelectAll] = useState(false);
+  const [isSelectAll, setIsSelectAll] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
   const [contentSearch, setContentSearch] = useState("");
@@ -43,7 +43,7 @@ export default function User() {
       ...params,
       search: params.search || "",
     };
-    seteIsSelectAll(false);
+    setIsSelectAll(false);
     setIsLoading(true);
     try {
       const response = await UserService.getUsers(param);
@@ -95,9 +95,9 @@ export default function User() {
         listUserId.push(user._id);
       });
       setUsersSelected(listUserId);
-      seteIsSelectAll(true);
+      setIsSelectAll(true);
     } else {
-      seteIsSelectAll(false);
+      setIsSelectAll(false);
       setUsersSelected([]);
     }
   };
@@ -107,9 +107,12 @@ export default function User() {
     let currentListUser = [...usersSelected];
     if (check) {
       currentListUser.push(userId);
+      if (currentListUser.length == users.length) {
+        setIsSelectAll(true);
+      }
       setUsersSelected(currentListUser);
     } else {
-      seteIsSelectAll(false);
+      setIsSelectAll(false);
       const index = currentListUser.indexOf(userId);
       if (index > -1) {
         currentListUser.splice(index, 1);
