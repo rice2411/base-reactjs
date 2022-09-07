@@ -50,14 +50,6 @@ Clone the repo
  ```sh
  git clone https://github.com/rice2411/base-reactjs
  ```
-* npm
-  ```sh
-  npm i
-  ```
-* npm
-  ```sh
-  npm run dev
-  ```
 ### Getting Started
 
 _Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
@@ -68,7 +60,7 @@ _Below is an example of how you can instruct your audience on installing and set
    npm i
    ```
 2. Enter tou API in .env FILE
-  ```js
+    ```js
    REACT_APP_API_URL = 'ENTER YOUR API';
    ```
 3. Run the project
