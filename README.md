@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="#">
-    <img src="https://res.cloudinary.com/practicaldev/image/fetch/s--ljmYNm3i--/c_imagga_scale,f_auto,fl_progressive,h_900,q_auto,w_1600/https://www.freecodecamp.org/news/content/images/size/w2000/2020/02/Ekran-Resmi-2019-11-18-18.08.13.png" alt="Logo" width="80" height="80">
+    <img src="https://mpng.subpng.com/20180604/pol/kisspng-react-javascript-angularjs-ionic-atom-5b154be6709500.6532453515281223424611.jpg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Best-README-Template</h3>
