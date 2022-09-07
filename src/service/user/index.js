@@ -6,6 +6,7 @@ const router = {
   get_me: `${env.apiUrl}/api/v1/user/get-me`,
   update: `${env.apiUrl}/api/v1/user/{userId}`,
   deactive: `${env.apiUrl}/api/v1/user/deactive`,
+  import_list: `${env.apiUrl}/api/v1/user/import-list`,
 };
 
 class UserService {
@@ -24,6 +25,10 @@ class UserService {
   static deactiveUsers(param) {
     let uri = router.deactive;
     return fetch.delete(uri, param);
+  }
+  static importList(param) {
+    let uri = router.import_list;
+    return fetch.post(uri, param);
   }
 }
 
