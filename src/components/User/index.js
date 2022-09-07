@@ -8,12 +8,15 @@ import { PAGINATE } from "../../constant/paginate";
 import Modal from "../../small_components/Modal";
 import EditUserModal, { BodyContent, HeaderContent } from "./Edit";
 import useModal from "../../hooks/useModal";
-import * as XLSX from "xlsx/xlsx.mjs";
+import { exportExcel, importExcel } from "../../helper/excel";
+import { User as UserModel } from "../../model/user";
 
 export default function User() {
   const { handleOpenConfirm, handleOpenAlertError } = useModal();
+
   const actionListRef = useRef(null);
   const actionListButtonRef = useRef(null);
+
   const [users, setUsers] = useState([]);
   const [userEdit, setUserEdit] = useState({});
   const [usersSelected, setUsersSelected] = useState([]);
@@ -21,17 +24,18 @@ export default function User() {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
   const [contentSearch, setContentSearch] = useState("");
-  const params = {
-    page: 1,
-    limit: PAGINATE.limit,
-    search: contentSearch || "",
-  };
   const [pagination, setPagination] = useState({
     limit: 10,
     page: 0,
     totalDocs: 0,
     totalPages: 0,
   });
+
+  const params = {
+    page: 1,
+    limit: PAGINATE.limit,
+    search: contentSearch || "",
+  };
 
   const fetchUsers = async (params) => {
     const param = {
@@ -51,12 +55,36 @@ export default function User() {
       setIsLoading(false);
     }
   };
-  const handleExportExcel = () => {
-    var wb = XLSX.utils.book_new();
-    var ws = XLSX.utils.json_to_sheet(users);
-    XLSX.utils.book_append_sheet(wb, ws, "Danh Sách Người Dùng");
-    XLSX.writeFile(wb, "Danh Sách Người Dùng.xlsx");
+
+  const handleImportListUser = async (data) => {
+    const params = {
+      listUser: data,
+    };
+    try {
+      const response = await UserService.importList(params);
+      setIsFetchData((preState) => !preState);
+    } catch (err) {
+      handleOpenAlertError(err?.response?.data?.message);
+    }
   };
+
+  const convertSheetDataUser = (data) => {
+    const userConvert = new UserModel();
+    userConvert.toRequestImport(data);
+    return userConvert;
+  };
+
+  const handleImportExcel = () => {
+    importExcel(handleImportListUser, convertSheetDataUser);
+  };
+  const handleExportExcel = () => {
+    let option = {
+      sheetName: "Danh sách người dùng",
+      data: users,
+    };
+    exportExcel(option);
+  };
+
   const handleSelectAllUsers = (e) => {
     const check = e.target.checked;
     if (check) {
@@ -69,10 +97,10 @@ export default function User() {
       setUsersSelected([]);
     }
   };
+
   const handleSelectUsers = (e, userId) => {
     const check = e.target.checked;
     let currentListUser = [...usersSelected];
-    console.log(currentListUser);
     if (check) {
       currentListUser.push(userId);
       setUsersSelected(currentListUser);
@@ -84,6 +112,7 @@ export default function User() {
       }
     }
   };
+
   const handleDeactiveUser = () => {
     if (usersSelected.length) {
       let text = "Bạn có muốn xoá những người dùng này?";
@@ -92,6 +121,7 @@ export default function User() {
       handleOpenAlertError("Vui lòng chọn người dùng");
     }
   };
+
   const onDeactiveUser = async () => {
     const param = {
       listUserId: usersSelected,
@@ -103,11 +133,13 @@ export default function User() {
       console.log(err);
     }
   };
+
   const handleOpenModalCreateUser = (user) => {
     setUserEdit(user);
     setIsOpenModalCreate(true);
     handleShowAction();
   };
+
   const handleClickOutSideAction = (e) => {
     if (
       e.target !== actionListButtonRef.current &&
@@ -119,6 +151,7 @@ export default function User() {
       actionListRef.current.classList.add("hidden");
     }
   };
+
   const handleShowAction = () => {
     if (actionListRef.current.classList.contains("hidden")) {
       actionListRef.current.classList.remove("hidden");
@@ -128,6 +161,7 @@ export default function User() {
       actionListRef.current.classList.add("hidden");
     }
   };
+
   const handleChangeSearch = (e) => {
     setContentSearch(e.target.value);
     handleDebounceSearch(e.target.value);
@@ -142,10 +176,12 @@ export default function User() {
     }, 400),
     []
   );
+
   useEffect(() => {
     fetchUsers(params);
     setContentSearch("");
   }, [isFetchData]);
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutSideAction);
     return () => {
@@ -209,6 +245,14 @@ export default function User() {
               className="py-1 text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownActionButton"
             >
+              <li>
+                <a
+                  onClick={() => handleImportExcel()}
+                  className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Nhập dữ liệu từ excel
+                </a>
+              </li>
               <li>
                 <a
                   onClick={() => handleExportExcel()}
