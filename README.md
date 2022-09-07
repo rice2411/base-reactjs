@@ -74,7 +74,7 @@ _Below is an example of how you can instruct your audience on installing and set
 
 <!-- CONTACT -->
 ## Contact
-Rice - [@your_twitter](fb.com/ricee24) - pentappingminh@gmail.com
+Rice - [Facebook](fb.com/ricee24) - pentappingminh@gmail.com
 
 Project Link: [https://github.com/rice2411/base-reactjs](https://github.com/rice2411/base-reactjs)
 
