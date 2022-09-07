@@ -43,30 +43,37 @@ This section should list any major frameworks/libraries used to bootstrap your p
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
-### Prerequisites
+### Installation
 
-This is an example of how to list things you need to use the software and how to install them.
+Do this to run project
+Clone the repo
+ ```sh
+ git clone https://github.com/rice2411/base-reactjs
+ ```
 * npm
   ```sh
-  npm install npm@latest -g
+  npm i
   ```
-
-### Installation
+* npm
+  ```sh
+  npm run dev
+  ```
+### Getting Started
 
 _Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+
+1. Install the packages
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   npm i
    ```
-3. Install NPM packages
+2. Enter tou API in .env FILE
+  ```js
+   REACT_APP_API_URL = 'ENTER YOUR API';
+   ```
+3. Run the project
    ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+   npm run dev
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
