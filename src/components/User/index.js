@@ -149,9 +149,9 @@ export default function User() {
     if (
       e.target !== actionListButtonRef.current &&
       actionListRef.current &&
-      actionListRef.current.classList.contains("block") &&
-      !actionListRef.current.contains(e.target)
+      actionListRef.current.classList.contains("block")
     ) {
+      if (actionListRef.current.contains(e.target)) e.target.click();
       actionListRef.current.classList.remove("block");
       actionListRef.current.classList.add("hidden");
     }
