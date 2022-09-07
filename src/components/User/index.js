@@ -21,6 +21,7 @@ export default function User() {
   const [userEdit, setUserEdit] = useState({});
   const [usersSelected, setUsersSelected] = useState([]);
   const [isFetchData, setIsFetchData] = useState(false);
+  const [isSelectAll, seteIsSelectAll] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
   const [contentSearch, setContentSearch] = useState("");
@@ -42,6 +43,7 @@ export default function User() {
       ...params,
       search: params.search || "",
     };
+    seteIsSelectAll(false);
     setIsLoading(true);
     try {
       const response = await UserService.getUsers(param);
@@ -93,7 +95,9 @@ export default function User() {
         listUserId.push(user._id);
       });
       setUsersSelected(listUserId);
+      seteIsSelectAll(true);
     } else {
+      seteIsSelectAll(false);
       setUsersSelected([]);
     }
   };
@@ -105,6 +109,7 @@ export default function User() {
       currentListUser.push(userId);
       setUsersSelected(currentListUser);
     } else {
+      seteIsSelectAll(false);
       const index = currentListUser.indexOf(userId);
       if (index > -1) {
         currentListUser.splice(index, 1);
@@ -144,9 +149,9 @@ export default function User() {
     if (
       e.target !== actionListButtonRef.current &&
       actionListRef.current &&
-      actionListRef.current.classList.contains("block") &&
-      !actionListRef.current.contains(e.target)
+      actionListRef.current.classList.contains("block")
     ) {
+      if (actionListRef.current.contains(e.target)) e.target.click();
       actionListRef.current.classList.remove("block");
       actionListRef.current.classList.add("hidden");
     }
@@ -310,6 +315,7 @@ export default function User() {
               <th scope="col" className="p-4">
                 <div className="flex items-center">
                   <input
+                    checked={isSelectAll}
                     onChange={(e) => handleSelectAllUsers(e)}
                     id="checkbox-all-search"
                     type="checkbox"
