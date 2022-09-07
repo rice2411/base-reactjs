@@ -144,9 +144,10 @@ export default function User() {
     if (
       e.target !== actionListButtonRef.current &&
       actionListRef.current &&
-      actionListRef.current.classList.contains("block") &&
-      !actionListRef.current.contains(e.target)
+      actionListRef.current.classList.contains("block") 
     ) {
+      if (actionListRef.current.contains(e.target)) 
+        e.target.click();
       actionListRef.current.classList.remove("block");
       actionListRef.current.classList.add("hidden");
     }
@@ -247,6 +248,7 @@ export default function User() {
             >
               <li>
                 <a
+                  href="#"
                   onClick={() => handleImportExcel()}
                   className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >
@@ -255,6 +257,7 @@ export default function User() {
               </li>
               <li>
                 <a
+                  href="#"
                   onClick={() => handleExportExcel()}
                   className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >
@@ -264,6 +267,7 @@ export default function User() {
             </ul>
             <div className="py-1">
               <a
+                href="#"
                 onClick={() => {
                   handleDeactiveUser();
                 }}
