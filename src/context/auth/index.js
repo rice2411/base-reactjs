@@ -24,15 +24,13 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       isValidToken = await verifyToken();
     }
-    console.log(currentPath);
-    console.log(isValidToken);
-    console.log(currentPath.split("/"));
+
     if (isValidToken != null) {
       if (currentPath.includes("/login"))
         navigate("/dashboard", { replace: true });
     } else {
-      if (currentPath.split("/")[1] || !currentPath.split("/")[1])
-        navigate("/login", { replace: true });
+      //navigate("/login", { replace: true });
+      window.location.href = "/login";
     }
   };
   const verifyToken = async () => {
