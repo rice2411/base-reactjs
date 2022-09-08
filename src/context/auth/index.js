@@ -29,8 +29,10 @@ export const AuthProvider = ({ children }) => {
       if (currentPath.includes("/login"))
         navigate("/dashboard", { replace: true });
     } else {
+      if (!currentPath.includes("/login")) {
+        window.location.href = "/login";
+      }
       //navigate("/login", { replace: true });
-      window.location.href = "/login";
     }
   };
   const verifyToken = async () => {
