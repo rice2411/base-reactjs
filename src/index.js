@@ -17,9 +17,9 @@ root.render(
       <AuthProvider>
         <ModeProvider>
           <ModalProvider>
-            <HashRouter>
+            <Routes>
               <Route path="/*" element={<App />} />
-            </HashRouter>
+            </Routes>
           </ModalProvider>
         </ModeProvider>
       </AuthProvider>
