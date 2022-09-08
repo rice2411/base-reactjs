@@ -21,7 +21,7 @@ export default function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/user" element={<UserPage />} />
       </Route>
-      <Route path="*" element={<NotFoundPage />} />
+      <Route path="https://rice-app.vercel.app" element={<NotFoundPage />} />
     </Routes>
   );
 }
