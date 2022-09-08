@@ -20,11 +20,13 @@ export const AuthProvider = ({ children }) => {
     const token = getToken();
     let isValidToken = null;
     const currentPath = window.location.href;
-    console.log(currentPath);
+
     if (token) {
       isValidToken = await verifyToken();
     }
-
+    console.log(currentPath);
+    console.log(isValidToken);
+    console.log(currentPath.split("/"));
     if (isValidToken != null) {
       if (currentPath.includes("/login"))
         navigate("/dashboard", { replace: true });
