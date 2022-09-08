@@ -7,9 +7,8 @@ import useMode from "../../hooks/useMode";
 
 export default function LayoutPage() {
   const { initMode } = useMode();
-  const { isLogin } = useAuth();
+
   useEffect(() => {
-    isLogin();
     initMode();
   }, []);
   return (

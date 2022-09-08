@@ -12,21 +12,23 @@ import UserPage from "./pages/user";
 // import "./styles/_reset.scss";
 import "./styles/global/_global.css";
 import useAuth from "./hooks/useAuth";
+import { ROUTER } from "./constant/router";
 
 export default function App() {
-  const { isLogin } = useAuth();
+  const { protectedRouter } = useAuth();
   useEffect(() => {
-    isLogin();
+    protectedRouter();
   }, []);
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route path={ROUTER.LOGIN} element={<LoginPage />} />
+      <Route path={ROUTER.REGISTER} element={<RegisterPage />} />
       <Route element={<LayoutPage />}>
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/user" element={<UserPage />} />
+        <Route path={ROUTER.DASHBOARD} element={<DashboardPage />} />
+        <Route path={ROUTER.SLASH} element={<DashboardPage />} />
+        <Route path={ROUTER.USER} element={<UserPage />} />
       </Route>
-      <Route path="*" element={<NotFoundPage />} />
+      <Route path={ROUTER.NOT_FOUND} element={<NotFoundPage />} />
     </Routes>
   );
 }
