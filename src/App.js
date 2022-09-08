@@ -14,7 +14,7 @@ import "./styles/global/_global.css";
 
 export default function App() {
   return (
-    <Routes>
+    <Routes basename="/dasboard">
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/" element={<LayoutPage />}>
