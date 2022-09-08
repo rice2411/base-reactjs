@@ -20,17 +20,16 @@ export const AuthProvider = ({ children }) => {
   };
   const protectedRouter = async () => {
     const currentPath = window.location.href;
-    console.log(currentPath);
+    const token = getToken();
+
     if (currentPath.includes(ROUTER.NOT_FOUND)) {
       return;
     }
-
     if (!isValidRouter() && !currentPath.includes(ROUTER.NOT_FOUND)) {
       window.location.href = ROUTER.NOT_FOUND;
       return;
     }
 
-    const token = getToken();
     let isValidToken = null;
 
     if (token) {
