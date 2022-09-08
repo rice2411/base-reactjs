@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
     const token = getToken();
     let isValidToken = null;
     const currentPath = window.location.href;
+    console.log(currentPath);
     if (token) {
       isValidToken = await verifyToken();
     }
