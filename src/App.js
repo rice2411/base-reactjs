@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Redirect } from "react-router-dom";
 
 import LoginPage from "./pages/login";
@@ -11,9 +11,13 @@ import UserPage from "./pages/user";
 
 // import "./styles/_reset.scss";
 import "./styles/global/_global.css";
+import useAuth from "./hooks/useAuth";
 
 export default function App() {
-  console.log(window.location.href);
+  const { isLogin } = useAuth();
+  useEffect(() => {
+    isLogin();
+  }, []);
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
