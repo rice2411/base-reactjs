@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
       if (currentPath.includes("/login"))
         navigate("/dashboard", { replace: true });
     } else {
-      if (!currentPath.includes("/login"))
+      if (currentPath.split("/")[1] || !currentPath.split("/")[1])
         navigate("/login", { replace: true });
     }
   };
