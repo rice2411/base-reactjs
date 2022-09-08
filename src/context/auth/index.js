@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       isValidToken = await verifyToken();
     }
-    console.log(isValidToken);
+
     if (isValidToken != null) {
       if (currentPath.includes("/login"))
         navigate("/dashboard", { replace: true });
