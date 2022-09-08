@@ -13,6 +13,7 @@ import UserPage from "./pages/user";
 import "./styles/global/_global.css";
 
 export default function App() {
+  console.log(window.location.href);
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
@@ -21,7 +22,7 @@ export default function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/user" element={<UserPage />} />
       </Route>
-      <Route path="https://rice-app.vercel.app" element={<NotFoundPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
