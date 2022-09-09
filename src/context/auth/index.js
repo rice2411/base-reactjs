@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
       return;
     }
     if (!isValidRouter() && !currentPath.includes(ROUTER.NOT_FOUND)) {
-      window.location.href = ROUTER.NOT_FOUND;
+      navigate(ROUTER.NOT_FOUND);
       return;
     }
 
@@ -41,9 +41,8 @@ export const AuthProvider = ({ children }) => {
         navigate("/dashboard", { replace: true });
     } else {
       if (!currentPath.includes("/login")) {
-        window.location.href = "/login";
+        navigate("/login", { replace: true });
       }
-      //navigate("/login", { replace: true });
     }
   };
   const verifyToken = async () => {
