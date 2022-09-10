@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 export default function NotFoundPage() {
+  const { protectedRouter } = useAuth();
+  useEffect(() => {
+    protectedRouter();
+  }, []);
   return (
     <div
       className="

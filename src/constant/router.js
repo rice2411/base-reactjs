@@ -5,6 +5,7 @@ export const ROUTER = {
   DASHBOARD: "/dashboard",
   USER: "/user",
   NOT_FOUND: "/notfound",
+  ALL: "*",
 };
 
 export const ROUTERS = [
