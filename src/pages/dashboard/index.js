@@ -6,6 +6,7 @@ export default function DashboardPage() {
   const { protectedRouter } = useAuth();
   useEffect(() => {
     protectedRouter();
+    console.log(123);
   }, []);
   return <Dashboard></Dashboard>;
 }
