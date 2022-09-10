@@ -9,7 +9,6 @@ export const exportExcel = (option) => {
 export const importExcel = (onSubmit, convert) => {
   const excelInput = document.createElement("input");
   excelInput.type = "file";
-  excelInput.setAttribute("id", "excel-input");
   excelInput.click();
   excelInput.onchange = (e) => {
     const file = e.target.files[0];
@@ -38,4 +37,5 @@ export const importExcel = (onSubmit, convert) => {
     };
     reader.readAsBinaryString(file);
   };
+  excelInput.remove();
 };

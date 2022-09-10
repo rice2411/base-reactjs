@@ -3,9 +3,10 @@ import Dashboard from "../../components/Dashboard";
 import useAuth from "../../hooks/useAuth";
 
 export default function DashboardPage() {
-  const { isLogin } = useAuth();
+  const { protectedRouter } = useAuth();
   useEffect(() => {
-    isLogin();
+    protectedRouter();
+    console.log(123);
   }, []);
   return <Dashboard></Dashboard>;
 }

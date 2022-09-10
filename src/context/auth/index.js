@@ -4,6 +4,8 @@ import cookies from "js-cookie";
 import { getToken, setIsValidToken } from "../../utils/auth";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../service/auth";
+import { isValidRouter, validatorRouter } from "../../helper/router";
+import { ROUTER } from "../../constant/router";
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
@@ -16,19 +18,31 @@ export const AuthProvider = ({ children }) => {
     cookies.remove("isValid");
     navigate("/login", { replace: true });
   };
-  const isLogin = async () => {
-    const token = getToken();
-    let isValidToken = null;
+  const protectedRouter = async () => {
     const currentPath = window.location.href;
+    const token = getToken();
+
+    if (currentPath.includes(ROUTER.NOT_FOUND)) {
+      return;
+    }
+    if (!isValidRouter() && !currentPath.includes(ROUTER.NOT_FOUND)) {
+      navigate(ROUTER.NOT_FOUND);
+      return;
+    }
+
+    let isValidToken = null;
+
     if (token) {
       isValidToken = await verifyToken();
     }
+
     if (isValidToken != null) {
       if (currentPath.includes("/login"))
         navigate("/dashboard", { replace: true });
     } else {
-      if (!currentPath.includes("/login"))
+      if (!currentPath.includes("/login")) {
         navigate("/login", { replace: true });
+      }
     }
   };
   const verifyToken = async () => {
@@ -46,7 +60,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ persist, setPersist, logout, isLogin, verifyToken }}
+      value={{ persist, setPersist, logout, protectedRouter, verifyToken }}
     >
       {children}
     </AuthContext.Provider>

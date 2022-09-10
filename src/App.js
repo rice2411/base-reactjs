@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Routes, Route, Redirect } from "react-router-dom";
 
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
@@ -11,18 +11,25 @@ import UserPage from "./pages/user";
 
 // import "./styles/_reset.scss";
 import "./styles/global/_global.css";
+import useAuth from "./hooks/useAuth";
+import { ROUTER } from "./constant/router";
 
 export default function App() {
+  const { protectedRouter } = useAuth();
+  useEffect(() => {
+    protectedRouter();
+  }, []);
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/" element={<LayoutPage />}>
-        <Route path="/" element={<DashboardPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/user" element={<UserPage />} />
+      <Route path={ROUTER.LOGIN} element={<LoginPage />} />
+      <Route path={ROUTER.REGISTER} element={<RegisterPage />} />
+      <Route element={<LayoutPage />}>
+        <Route path={ROUTER.DASHBOARD} element={<DashboardPage />} />
+        <Route path={ROUTER.SLASH} element={<DashboardPage />} />
+        <Route path={ROUTER.USER} element={<UserPage />} />
       </Route>
-      <Route path="*" element={<NotFoundPage />} />
+      <Route path={ROUTER.NOT_FOUND} element={<NotFoundPage />} />
+      <Route path={ROUTER.ALL} element={<NotFoundPage />} />
     </Routes>
   );
 }
