@@ -23,9 +23,11 @@ export const AuthProvider = ({ children }) => {
     const token = getToken();
 
     if (currentPath.includes(ROUTER.NOT_FOUND)) {
+      console.log(1);
       return;
     }
     if (!isValidRouter() && !currentPath.includes(ROUTER.NOT_FOUND)) {
+      console.log(2);
       navigate(ROUTER.NOT_FOUND);
       return;
     }
@@ -37,11 +39,14 @@ export const AuthProvider = ({ children }) => {
     }
 
     if (isValidToken != null) {
-      if (currentPath.includes("/login"))
+      if (currentPath.includes("/login")) {
         navigate("/dashboard", { replace: true });
+        console.log(3);
+      }
     } else {
       if (!currentPath.includes("/login")) {
         navigate("/login", { replace: true });
+        console.log(4);
       }
     }
   };
