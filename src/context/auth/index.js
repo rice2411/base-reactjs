@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
       }
     } else {
       if (!currentPath.includes("/login")) {
-        navigate("/login", { replace: true });
+        navigate("/login");
         console.log(4);
       }
     }
