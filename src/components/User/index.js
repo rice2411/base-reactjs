@@ -393,7 +393,7 @@ export default function User() {
                       />
                       <div className="pl-3">
                         <div className="text-base font-semibold">
-                          {user?.firstname + " " + user?.lastname}
+                          {user?.first_name + " " + user?.last_name}
                         </div>
                         <div className="font-normal text-gray-500">
                           {user?.email || "Tài khoản chưa đăng ký email"}

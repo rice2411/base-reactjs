@@ -9,7 +9,7 @@ import { setIsValidToken, setToken, setUser } from "../../utils/auth";
 import { loginSchema } from "./loginSchema";
 import "./styles.scss";
 export default function Login() {
-  const { setAuth, persist, setPersist } = useAuth();
+  const { persist, setPersist } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -71,7 +71,7 @@ export default function Login() {
         <div className="max-w-md w-full space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Đăng nhập
+              Đăng nhập
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               hoặc{" "}
