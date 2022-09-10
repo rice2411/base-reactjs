@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
     const token = getToken();
 
     if (currentPath.includes(ROUTER.NOT_FOUND)) {
-      console.log(1);
       return;
     }
 
@@ -35,13 +34,11 @@ export const AuthProvider = ({ children }) => {
 
     if (isValidToken != null) {
       if (currentPath.includes("/login")) {
-        navigate((to = "/dashboard"), { replace: true });
-        console.log(3);
+        window.location.href = "/dashboard";
       }
     } else {
       if (!currentPath.includes("/login")) {
-        navigate((to = "/login"));
-        console.log(4);
+        window.location.href = "/login";
       }
     }
   };

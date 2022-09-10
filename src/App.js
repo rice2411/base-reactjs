@@ -29,7 +29,6 @@ export default function App() {
         <Route path={ROUTER.USER} element={<UserPage />} />
       </Route>
       <Route path={ROUTER.NOT_FOUND} element={<NotFoundPage />} />
-      <Route path={ROUTER.ALL} element={<NotFoundPage />} />
     </Routes>
   );
 }
