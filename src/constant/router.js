@@ -4,6 +4,7 @@ export const ROUTER = {
   REGISTER: "/register",
   DASHBOARD: "/dashboard",
   USER: "/user",
+  USER_DETAIL: "/user/detail",
   NOT_FOUND: "/notfound",
   ALL: "*",
 };

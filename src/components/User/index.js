@@ -405,8 +405,12 @@ export default function User() {
                     </td>
                     <td className="py-4 px-6 align-middle">
                       <div className="flex items-center">
-                        <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2" />{" "}
-                        Đã xác thực
+                        <div
+                          className={`h-2.5 w-2.5 rounded-full mt-0.5 ${
+                            user?.email_verified ? "bg-green-400" : "bg-red-700"
+                          }  mr-2`}
+                        />
+                        {user?.email_verified ? "Đã xác thực" : "Chưa xác thực"}
                       </div>
                     </td>
                     <td className="py-4 px-6 align-middle">

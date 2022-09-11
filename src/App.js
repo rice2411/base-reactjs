@@ -13,6 +13,7 @@ import UserPage from "./pages/user";
 import "./styles/global/_global.css";
 import useAuth from "./hooks/useAuth";
 import { ROUTER } from "./constant/router";
+import UserPageDetail from "./pages/user/detail";
 
 export default function App() {
   const { protectedRouter } = useAuth();
@@ -27,6 +28,7 @@ export default function App() {
         <Route path={ROUTER.DASHBOARD} element={<DashboardPage />} />
         <Route path={ROUTER.SLASH} element={<DashboardPage />} />
         <Route path={ROUTER.USER} element={<UserPage />} />
+        <Route path={ROUTER.USER_DETAIL} element={<UserPageDetail />} />
       </Route>
       <Route path={ROUTER.NOT_FOUND} element={<NotFoundPage />} />
     </Routes>
