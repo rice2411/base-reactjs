@@ -4,9 +4,9 @@ import User from "../../components/User";
 import useAuth from "../../hooks/useAuth";
 
 export default function UserPage() {
-  const { protectedRouter } = useAuth();
+  const { handleVerifyToken } = useAuth();
   useEffect(() => {
-    protectedRouter();
+    handleVerifyToken();
   }, []);
   return <User></User>;
 }

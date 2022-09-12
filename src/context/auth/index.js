@@ -2,10 +2,10 @@ import { createContext, useState } from "react";
 import cookies from "js-cookie";
 
 import { getToken, setIsValidToken } from "../../utils/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate, useLocation } from "react-router-dom";
 import AuthService from "../../service/auth";
-import { isValidRouter, validatorRouter } from "../../helper/router";
-import { ROUTER } from "../../constant/router";
+
+import { ROUTER, ROUTERS } from "../../constant/router";
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
@@ -13,33 +13,27 @@ export const AuthProvider = ({ children }) => {
   const [persist, setPersist] = useState(
     JSON.parse(localStorage.getItem("persist")) || false
   );
+  const location = useLocation();
   const logout = async () => {
     cookies.remove("token");
     cookies.remove("isValid");
     navigate("/login", { replace: true });
   };
-  const protectedRouter = async () => {
-    const currentPath = window.location.href;
-    const token = getToken();
+  const handleVerifyToken = async () => {
+    const path = location.pathname;
 
-    if (currentPath.includes(ROUTER.NOT_FOUND)) {
+    if (!ROUTERS.includes(path)) {
       return;
     }
-
-    let isValidToken = null;
-
+    const token = getToken();
     if (token) {
+      let isValidToken = null;
       isValidToken = await verifyToken();
-    }
-
-    if (isValidToken != null) {
-      if (currentPath.includes("/login")) {
-        window.location.href = "/dashboard";
+      if (!isValidToken) {
+        logout();
       }
     } else {
-      if (!currentPath.includes("/login")) {
-        window.location.href = "/login";
-      }
+      logout();
     }
   };
   const verifyToken = async () => {
@@ -57,7 +51,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ persist, setPersist, logout, protectedRouter, verifyToken }}
+      value={{ persist, setPersist, logout, handleVerifyToken, verifyToken }}
     >
       {children}
     </AuthContext.Provider>

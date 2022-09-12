@@ -74,7 +74,7 @@ export default function EditUserModal({ user, setClose, setIsFetchData }) {
                       <img
                         ref={avatarRef}
                         className="w-40 h-40 rounded-full"
-                        src={FILE_PATH + user?.avatar || "/images/avatar.jpg"}
+                        src={FILE_PATH + user?.avatar || DEFAULT_AVATAR}
                         alt="Rounded avatar"
                       />
                     </div>

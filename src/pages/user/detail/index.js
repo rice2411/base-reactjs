@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import UserDetail from "../../../components/User/Detail";
 
 export default function UserPageDetail() {
-  //   const { protectedRouter } = useAuth();
+  //   const { handleVerifyToken } = useAuth();
   //   useEffect(() => {
-  //     protectedRouter();
+  //     handleVerifyToken();
   //   }, []);
   return <UserDetail></UserDetail>;
 }

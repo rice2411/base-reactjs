@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FILE_PATH } from "../../constant/image";
+import { DEFAULT_AVATAR, FILE_PATH } from "../../constant/image";
 import UserService from "../../service/user";
 import { debounce } from "lodash";
 import Pagination from "../../shared/Table/Pagination";
@@ -388,7 +388,7 @@ export default function User() {
                     >
                       <img
                         className="w-10 h-10 rounded-full"
-                        src={`${FILE_PATH + user?.avatar}`}
+                        src={`${FILE_PATH + user?.avatar || DEFAULT_AVATAR}`}
                         alt={`${user?.username} avatar`}
                       />
                       <div className="pl-3">

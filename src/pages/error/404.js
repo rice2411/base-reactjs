@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 export default function NotFoundPage() {
-  const { protectedRouter } = useAuth();
+  const { handleVerifyToken } = useAuth();
   useEffect(() => {
-    protectedRouter();
+    handleVerifyToken();
   }, []);
   return (
     <div

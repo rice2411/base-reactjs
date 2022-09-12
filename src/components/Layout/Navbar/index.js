@@ -13,7 +13,7 @@ import { classNames } from "./helper";
 import { Link } from "react-router-dom";
 
 import { getUser } from "../../../utils/auth";
-import { FILE_PATH } from "../../../constant/image";
+import { DEFAULT_AVATAR, FILE_PATH } from "../../../constant/image";
 import useMode from "../../../hooks/useMode";
 import useAuth from "../../../hooks/useAuth";
 
@@ -132,7 +132,7 @@ export default function Navbar() {
                         className="h-8 w-8 rounded-full"
                         src={
                           FILE_PATH +
-                          (user.avatar ? user.avatar : "avatar_default.png")
+                          (user.avatar ? user.avatar : DEFAULT_AVATAR)
                         }
                         alt=""
                       />
