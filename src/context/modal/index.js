@@ -5,6 +5,7 @@ import { MODAL_ROOT } from "../../constant/modal";
 import AlertSuccess from "../../small_components/Alert/Success";
 import AlertError from "../../small_components/Alert/Error";
 import Confirm from "../../small_components/Confirm";
+import { createRoot } from "react-dom/client";
 
 const ModalContext = createContext({});
 
@@ -15,9 +16,8 @@ export const ModalProvider = ({ children }) => {
     alertSuccessModal(text, onSubmit);
   };
   const alertSuccessModal = (text, onSubmit) => {
-    ReactDOM.render(
-      <AlertSuccess isOpen={true} text={text} onSubmit={onSubmit} />,
-      document.getElementById(MODAL_ROOT)
+    createRoot(document.getElementById(MODAL_ROOT)).render(
+      <AlertSuccess isOpen={true} text={text} onSubmit={onSubmit} />
     );
     return;
   };
@@ -27,10 +27,10 @@ export const ModalProvider = ({ children }) => {
     alertErrorModal(text);
   };
   const alertErrorModal = (text) => {
-    ReactDOM.render(
-      <AlertError isOpen={true} text={text} />,
-      document.getElementById(MODAL_ROOT)
+    createRoot(document.getElementById(MODAL_ROOT)).render(
+      <AlertError isOpen={true} text={text} />
     );
+
     return;
   };
   const handleOpenConfirm = async (text, onSubmit) => {
@@ -39,9 +39,8 @@ export const ModalProvider = ({ children }) => {
     confirmModal(text, onSubmit);
   };
   const confirmModal = (text, onSubmit) => {
-    ReactDOM.render(
-      <Confirm isOpen={true} text={text} onSubmit={onSubmit} />,
-      document.getElementById(MODAL_ROOT)
+    createRoot(document.getElementById(MODAL_ROOT)).render(
+      <Confirm isOpen={true} text={text} onSubmit={onSubmit} />
     );
     return;
   };
