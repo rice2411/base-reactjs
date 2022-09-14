@@ -8,7 +8,8 @@ import AuthService from "../../../service/auth";
 import useModal from "../../../hooks/useModal";
 
 function ResetPassword({ token, className }) {
-  const { handleOpenConfirm, handleOpenAlertSucess } = useModal();
+  const { handleOpenAlertSucess } = useModal();
+  const navigate = useNavigate();
 
   const otpRef = useRef();
 
@@ -18,6 +19,10 @@ function ResetPassword({ token, className }) {
     setErrMsg("");
     otpRef.current.focus();
   }, []);
+
+  const reSignIn = ()=>{
+    navigate("/login");
+  }
 
   const backForm = () =>{
     const frmReset = document.getElementById("forgotPwd-reset");
@@ -33,6 +38,8 @@ function ResetPassword({ token, className }) {
     };
     try {
       const response = await AuthService.resetPassword(params);
+      // handleOpenAlertSucess("Cập nhật thành công");
+      // reSignIn();
     } catch (err) {
       {
         setErrMsg(err.response.data.message);

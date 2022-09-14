@@ -9,14 +9,14 @@ function ForgotPassword(props) {
   const [token, setToken] = useState("");
   const [emailForm, setEmailform] = useState(true);
   const [otpForm, setOtpform] = useState(false);
-  
+
   const handleSetEmail = (mail) => {
     setEmail(mail);
-  }
+  };
 
   const handleSettoken = (token) => {
     setToken(token);
-  }
+  };
 
   useEffect(() => {
     const frmEmail = document.getElementById("forgotPwd-mail");
@@ -29,12 +29,19 @@ function ForgotPassword(props) {
 
   return (
     <div className="h-screen w-screen flex relative overflow-hidden">
-        
-            {/* <div className="w-10 h-10 bg-red-500 -top-10 absolute">abc</div> */}
-            <SendMail setEmail={handleSetEmail} className="absolute inset-0 transform-translate duration-500 linear" />
-            <OTP email={email} setToken={handleSettoken} className="absolute inset-0 transform-translate duration-500 linear" />
-            <ResetPassword token={token} className="absolute inset-0 transform-translate duration-500 linear"/>
-         
+      <SendMail
+        setEmail={handleSetEmail}
+        className="absolute inset-0 transform-translate duration-500 linear"
+      />
+      <OTP
+        email={email}
+        setToken={handleSettoken}
+        className="absolute inset-0 transform-translate duration-500 linear"
+      />
+      <ResetPassword
+        token={token}
+        className="absolute inset-0 transform-translate duration-500 linear"
+      />
     </div>
   );
 }

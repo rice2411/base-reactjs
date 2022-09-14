@@ -41,8 +41,8 @@ function OTP({ setToken, email, className }) {
     try {
       const response = await MailService.SendOtp(params);
       setToken(response.data.data.token);
+      handleOpenAlertSucess("Cập nhật thành công");
       switchForm();
-      // handleOpenAlertSucess("Cập nhật thành công");
     } catch (err) {
       if (err?.response) {
         setErrMsg(err.response.data.message);

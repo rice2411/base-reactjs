@@ -37,6 +37,7 @@ function SendMail({ setEmail, className }) {
       setEmail(values.email);
       try {
         const response = await MailService.SendMail(params);
+        handleOpenAlertSucess("Cập nhật thành công");
         switchForm();
       } catch (err) {
         if (err?.response) {

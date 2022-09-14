@@ -2,6 +2,7 @@ export const ROUTER = {
   SLASH: "/",
   LOGIN: "/login",
   REGISTER: "/register",
+  FORGOTPASSWORD: "/forgotPassword",
   DASHBOARD: "/dashboard",
   USER: "/user",
   USER_DETAIL: "/user/detail",
@@ -12,6 +13,7 @@ export const ROUTER = {
 export const ROUTERS = [
   ROUTER.LOGIN,
   ROUTER.REGISTER,
+  ROUTER.FORGOTPASSWORD,
   ROUTER.DASHBOARD,
   ROUTER.USER,
   ROUTER.NOT_FOUND,

@@ -29,6 +29,7 @@ export default function App() {
   }, []);
   return (
     <Routes>
+      <Route element={<ContainerPage />}>
 
       <Route
         path={ROUTER.LOGIN}
@@ -42,6 +43,13 @@ export default function App() {
           !isValidToken ? <RegisterPage /> : <Navigate to={ROUTER.DASHBOARD} />
         }
       />
+      <Route
+        path={ROUTER.FORGOTPASSWORD}
+        element={
+          !isValidToken ? <ForgotPasswordPage /> : <Navigate to={ROUTER.DASHBOARD} />
+        }
+      />
+      </Route>
       <Route element={<LayoutPage />}>
         <Route path={ROUTER.DASHBOARD} element={<DashboardPage />} />
         <Route path={ROUTER.SLASH} element={<DashboardPage />} />
