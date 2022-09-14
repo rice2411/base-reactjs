@@ -20,7 +20,6 @@ import { ROUTER } from "./constant/router";
 import UserPageDetail from "./pages/user/detail";
 import { getIsValidToken } from "./utils/auth";
 
-
 export default function App() {
   const { handleVerifyToken } = useAuth();
   const isValidToken = getIsValidToken();
@@ -30,25 +29,32 @@ export default function App() {
   return (
     <Routes>
       <Route element={<ContainerPage />}>
-
-      <Route
-        path={ROUTER.LOGIN}
-        element={
-          !isValidToken ? <LoginPage /> : <Navigate to={ROUTER.DASHBOARD} />
-        }
-      />
-      <Route
-        path={ROUTER.REGISTER}
-        element={
-          !isValidToken ? <RegisterPage /> : <Navigate to={ROUTER.DASHBOARD} />
-        }
-      />
-      <Route
-        path={ROUTER.FORGOTPASSWORD}
-        element={
-          !isValidToken ? <ForgotPasswordPage /> : <Navigate to={ROUTER.DASHBOARD} />
-        }
-      />
+        <Route
+          path={ROUTER.LOGIN}
+          element={
+            !isValidToken ? <LoginPage /> : <Navigate to={ROUTER.DASHBOARD} />
+          }
+        />
+        <Route
+          path={ROUTER.REGISTER}
+          element={
+            !isValidToken ? (
+              <RegisterPage />
+            ) : (
+              <Navigate to={ROUTER.DASHBOARD} />
+            )
+          }
+        />
+        <Route
+          path={ROUTER.FORGOTPASSWORD}
+          element={
+            !isValidToken ? (
+              <ForgotPasswordPage />
+            ) : (
+              <Navigate to={ROUTER.DASHBOARD} />
+            )
+          }
+        />
       </Route>
       <Route element={<LayoutPage />}>
         <Route path={ROUTER.DASHBOARD} element={<DashboardPage />} />
@@ -58,7 +64,6 @@ export default function App() {
       </Route>
       <Route path={ROUTER.NOT_FOUND} element={<NotFoundPage />} />
       <Route path={ROUTER.ALL} element={<NotFoundPage />} />
-
     </Routes>
   );
 }

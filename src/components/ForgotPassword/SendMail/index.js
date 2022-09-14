@@ -13,6 +13,7 @@ function SendMail({ setEmail, className }) {
   const checkRef = useRef();
 
   const [checkSubmit, setCheckSubmit] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
@@ -23,26 +24,31 @@ function SendMail({ setEmail, className }) {
     setErrMsg("");
   }, []);
 
-  const switchForm = ()=>{
+  const switchForm = () => {
     const frmEmail = document.getElementById("forgotPwd-mail");
     const frmOtp = document.getElementById("forgotPwd-otp");
     frmEmail?.classList.add("-translate-x-full");
     frmOtp?.classList.remove("translate-x-full");
-  }
+  };
   const handleSubmit = async (values) => {
     if (checkSubmit) {
       const params = {
         email: values.email,
       };
       setEmail(values.email);
+      setIsSubmitting(true);
       try {
         const response = await MailService.SendMail(params);
-        handleOpenAlertSucess("Cập nhật thành công");
-        switchForm();
+        handleOpenAlertSucess(
+          "Cập nhật thành công tâm linh vãi cả bìu",
+          switchForm
+        );
       } catch (err) {
         if (err?.response) {
           setErrMsg(err.response.data.message);
         }
+      } finally {
+        setIsSubmitting(false);
       }
     } else {
       checkRef.current.focus();
@@ -64,7 +70,10 @@ function SendMail({ setEmail, className }) {
   }, []);
 
   return (
-    <section className={`bg-gray-50 dark:bg-gray-900 w-full" ${className}`} id="forgotPwd-mail">
+    <section
+      className={`bg-gray-50 dark:bg-gray-900 w-full" ${className}`}
+      id="forgotPwd-mail"
+    >
       <div className="flex items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white relative rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className={`sm:p-8 `}>
@@ -142,9 +151,14 @@ function SendMail({ setEmail, className }) {
               <div className="flex justify-between">
                 <button
                   type="submit"
-                  className="group relative flex justify-center py-2 px-8 border border-transparent text-m font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  disabled={isSubmitting}
+                  className={`${
+                    isSubmitting
+                      ? "bg-indigo-400"
+                      : "bg-indigo-600 hover:bg-indigo-700"
+                  } group relative flex justify-center py-2 px-8 border border-transparent text-m font-medium rounded-md text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                 >
-                  Tiếp tục
+                  {isSubmitting ? "... Đang xác thực" : "Tiếp tục"}
                 </button>
                 <p className="text-sm font-light text-gray-900 dark:text-gray-400">
                   <Link
