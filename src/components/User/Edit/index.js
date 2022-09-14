@@ -1,12 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Formik, Form, Field } from "formik";
-import {
-  Modal as ModalDefault,
-  TextInput,
-  Checkbox,
-  Label,
-  Button,
-} from "flowbite-react";
+import { Modal as ModalDefault, Button } from "flowbite-react";
 import { DEFAULT_AVATAR, FILE_PATH } from "../../../constant/image";
 import { User } from "../../../model/user";
 import { handleCloseModal } from "../../../small_components/Modal";
@@ -40,7 +34,7 @@ export default function EditUserModal({ user, setClose, setIsFetchData }) {
     }
 
     try {
-      const response = await UserService.updateUser(param._id, formData);
+      await UserService.updateUser(param._id, formData);
       handleOpenAlertSucess("Cập nhật thành công", handleFinishUpdate);
       handleCloseModal(setClose);
       avatarUploadRef.current.value = "";
@@ -80,7 +74,7 @@ export default function EditUserModal({ user, setClose, setIsFetchData }) {
                       <img
                         ref={avatarRef}
                         className="w-40 h-40 rounded-full"
-                        src={FILE_PATH + user?.avatar || "/images/avatar.jpg"}
+                        src={FILE_PATH + user?.avatar || DEFAULT_AVATAR}
                         alt="Rounded avatar"
                       />
                     </div>

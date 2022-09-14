@@ -1,20 +1,20 @@
 export class User {
   _id;
-  fistname;
-  lastname;
+  fist_name;
+  last_name;
   username;
   role;
   password;
   avatarUpload;
   is_active;
   email;
-  phoneNumber;
+  phone;
   password;
   toRequestUpdate(param) {
-    this.firstname = param.firstname;
-    this.lastname = param.lastname;
+    this.fist_name = param.fist_name;
+    this.last_name = param.last_name;
     this.email = param.email;
-    this.phoneNumber = param.phoneNumber;
+    this.phone = param.phone;
 
     return this;
   }

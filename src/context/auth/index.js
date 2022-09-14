@@ -2,8 +2,10 @@ import { createContext, useState } from "react";
 import cookies from "js-cookie";
 
 import { getToken, setIsValidToken } from "../../utils/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate, useLocation } from "react-router-dom";
 import AuthService from "../../service/auth";
+
+import { ROUTER, ROUTERS } from "../../constant/router";
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
@@ -11,24 +13,27 @@ export const AuthProvider = ({ children }) => {
   const [persist, setPersist] = useState(
     JSON.parse(localStorage.getItem("persist")) || false
   );
+  const location = useLocation();
   const logout = async () => {
     cookies.remove("token");
     cookies.remove("isValid");
     navigate("/login", { replace: true });
   };
-  const isLogin = async () => {
-    const token = getToken();
-    let isValidToken = null;
-    const currentPath = window.location.href;
-    if (token) {
-      isValidToken = await verifyToken();
+  const handleVerifyToken = async () => {
+    const path = location.pathname;
+
+    if (!ROUTERS.includes(path)) {
+      return;
     }
-    if (isValidToken != null) {
-      if (currentPath.includes("/login"))
-        navigate("/dashboard", { replace: true });
+    const token = getToken();
+    if (token) {
+      let isValidToken = null;
+      isValidToken = await verifyToken();
+      if (!isValidToken) {
+        logout();
+      }
     } else {
-      if (!currentPath.includes("/login"))
-        navigate("/login", { replace: true });
+      logout();
     }
   };
   const verifyToken = async () => {
@@ -46,7 +51,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ persist, setPersist, logout, isLogin, verifyToken }}
+      value={{ persist, setPersist, logout, handleVerifyToken, verifyToken }}
     >
       {children}
     </AuthContext.Provider>

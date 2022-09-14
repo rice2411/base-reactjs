@@ -13,7 +13,7 @@ import { classNames } from "./helper";
 import { Link } from "react-router-dom";
 
 import { getUser } from "../../../utils/auth";
-import { FILE_PATH } from "../../../constant/image";
+import { DEFAULT_AVATAR, FILE_PATH } from "../../../constant/image";
 import useMode from "../../../hooks/useMode";
 import useAuth from "../../../hooks/useAuth";
 
@@ -130,7 +130,10 @@ export default function Navbar() {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src={FILE_PATH + user.avatar || ""}
+                        src={
+                          FILE_PATH +
+                          (user.avatar ? user.avatar : DEFAULT_AVATAR)
+                        }
                         alt=""
                       />
                       <h3 className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">

@@ -1,8 +1,3 @@
-import { useEffect } from "react";
-
-import UserService from "../../service/user";
-
-/* This example requires Tailwind CSS v2.0+ */
 const features = [
   {
     name: "ReactJS",
