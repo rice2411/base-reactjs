@@ -3,6 +3,7 @@ import { Formik, Form, Field } from "formik";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import useModal from "../../hooks/useModal";
 import AuthService from "../../service/auth";
 import UserService from "../../service/user";
 import { setIsValidToken, setToken, setUser } from "../../utils/auth";
@@ -10,6 +11,7 @@ import { loginSchema } from "./loginSchema";
 import "./styles.scss";
 export default function Login() {
   const { persist, setPersist } = useAuth();
+  const { handleOpenAlertSucess } = useModal();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,6 +63,10 @@ export default function Login() {
     setPersist((prev) => !prev);
   };
 
+  const test = () => {
+    handleOpenAlertSucess("asdu");
+  };
+
   useEffect(() => {
     localStorage.setItem("persist", persist);
   }, [persist]);
@@ -70,7 +76,10 @@ export default function Login() {
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ">
         <div className="max-w-md w-full space-y-8">
           <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            <h2
+              className="mt-6 text-center text-3xl font-extrabold text-gray-900"
+              onClick={test}
+            >
               Đăng nhập
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">

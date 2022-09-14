@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     cookies.remove("token");
     cookies.remove("isValid");
-    navigate("/login", { replace: true });
+    navigate(ROUTER.LOGIN, { replace: true });
   };
   const handleVerifyToken = async () => {
     const path = location.pathname;
