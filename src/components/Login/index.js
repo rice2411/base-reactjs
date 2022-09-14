@@ -157,12 +157,12 @@ export default function Login() {
                   </div>
 
                   <div className="text-sm">
-                    <a
-                      href="12"
+                    <Link
+                      to={"/forgotpassword"}
                       className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
                       Quên mật khẩu?
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
