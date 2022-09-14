@@ -1,14 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import SendMail from "./SendMail";
 import OTP from "./OTP";
 import ResetPassword from "./ResetPassword";
 import { useState } from "react";
+import { STEPS } from "./helper";
 
-function ForgotPassword(props) {
+export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [token, setToken] = useState("");
-  const [emailForm, setEmailform] = useState(true);
-  const [otpForm, setOtpform] = useState(false);
+
+  const step1 = useRef();
+  const step2 = useRef();
+  const step3 = useRef();
+
+  const classStep = {
+    leftSide: "-translate-x-full",
+    rightSide: "translate-x-full",
+  };
 
   const handleSetEmail = (mail) => {
     setEmail(mail);
@@ -17,14 +25,30 @@ function ForgotPassword(props) {
   const handleSettoken = (token) => {
     setToken(token);
   };
+  const nextStep = (step) => {
+    if (step == STEPS.otp) {
+      step1.current.classList.add(classStep.leftSide);
+      step2.current.classList.remove(classStep.rightSide);
+    }
+    if (step == STEPS.resetPassword) {
+      step2.current.classList.add(classStep.leftSide);
+      step3.current.classList.remove(classStep.rightSide);
+    }
+  };
+  const previousStep = (step) => {
+    if (step == STEPS.sendMail) {
+      step1.current.classList.remove(classStep.leftSide);
+      step2.current.classList.add(classStep.rightSide);
+    }
+    if (step == STEPS.otp) {
+      step2.current.classList.remove(classStep.leftSide);
+      step3.current.classList.add(classStep.rightSide);
+    }
+  };
 
   useEffect(() => {
-    const frmEmail = document.getElementById("forgotPwd-mail");
-    frmEmail?.classList.remove("-translate-x-full");
-    const frmOtp = document.getElementById("forgotPwd-otp");
-    frmOtp?.classList.add("translate-x-full");
-    const frmReset = document.getElementById("forgotPwd-reset");
-    frmReset?.classList.add("translate-x-full");
+    step2.current.classList.add(classStep.rightSide);
+    step3.current.classList.add(classStep.rightSide);
   }, []);
 
   return (
@@ -32,18 +56,23 @@ function ForgotPassword(props) {
       <SendMail
         setEmail={handleSetEmail}
         className="absolute inset-0 transform-translate duration-500 linear"
+        refStep={step1}
+        nextStep={nextStep}
       />
       <OTP
         email={email}
         setToken={handleSettoken}
         className="absolute inset-0 transform-translate duration-500 linear"
+        refStep={step2}
+        nextStep={nextStep}
+        previousStep={previousStep}
       />
       <ResetPassword
         token={token}
         className="absolute inset-0 transform-translate duration-500 linear"
+        refStep={step3}
+        previousStep={previousStep}
       />
     </div>
   );
 }
-
-export default ForgotPassword;

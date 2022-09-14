@@ -45,16 +45,7 @@ export default function App() {
             )
           }
         />
-        <Route
-          path={ROUTER.FORGOTPASSWORD}
-          element={
-            !isValidToken ? (
-              <ForgotPasswordPage />
-            ) : (
-              <Navigate to={ROUTER.DASHBOARD} />
-            )
-          }
-        />
+        <Route path={ROUTER.FORGOTPASSWORD} element={<ForgotPasswordPage />} />
       </Route>
       <Route element={<LayoutPage />}>
         <Route path={ROUTER.DASHBOARD} element={<DashboardPage />} />

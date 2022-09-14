@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { BiArrowBack } from 'react-icons/bi';
+import { BiArrowBack } from "react-icons/bi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 
 import { resetPasswordSchema } from "./resetPasswordSchema";
 import AuthService from "../../../service/auth";
 import useModal from "../../../hooks/useModal";
+import { STEPS } from "../helper";
 
-function ResetPassword({ token, className }) {
+function ResetPassword({ token, className, refStep, previousStep }) {
   const { handleOpenAlertSucess } = useModal();
   const navigate = useNavigate();
 
@@ -20,16 +21,9 @@ function ResetPassword({ token, className }) {
     otpRef.current.focus();
   }, []);
 
-  const reSignIn = ()=>{
+  const reSignIn = () => {
     navigate("/login");
-  }
-
-  const backForm = () =>{
-    const frmReset = document.getElementById("forgotPwd-reset");
-    const frmOtp = document.getElementById("forgotPwd-otp");
-    frmOtp?.classList.remove("-translate-x-full");
-    frmReset?.classList.add("translate-x-full");
-  }
+  };
 
   const handleSubmit = async (values) => {
     const params = {
@@ -38,8 +32,7 @@ function ResetPassword({ token, className }) {
     };
     try {
       const response = await AuthService.resetPassword(params);
-      // handleOpenAlertSucess("Cập nhật thành công");
-      // reSignIn();
+      handleOpenAlertSucess("Cập nhật thành công", reSignIn);
     } catch (err) {
       {
         setErrMsg(err.response.data.message);
@@ -66,11 +59,19 @@ function ResetPassword({ token, className }) {
   return (
     <section
       className={`bg-gray-50 dark:bg-gray-900 w-full" ${className}`}
-      id="forgotPwd-reset"
+      id="input-reset-password-form"
+      ref={refStep}
     >
       <div className="flex items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white relative rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <span className="text-2xl absolute top-2 left-4 hover:text-3xl cursor-pointer" onClick={backForm}><BiArrowBack/></span>
+          <span
+            className="text-2xl absolute top-2 left-4 hover:text-3xl cursor-pointer"
+            onClick={() => {
+              previousStep(STEPS.otp);
+            }}
+          >
+            <BiArrowBack />
+          </span>
           <div className="sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Tạo mật khẩu mới.
