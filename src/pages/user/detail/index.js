@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import UserDetail from "../../../components/User/Detail";
 
 export default function UserPageDetail() {
