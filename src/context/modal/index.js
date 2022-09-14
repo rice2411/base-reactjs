@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createContext } from "react";
-import { MODAL_ROOT } from "../../constant/modal";
+// import { MODAL_ROOT } from "../../constant/modal";
 import AlertSuccess from "../../small_components/Alert/Success";
 import AlertError from "../../small_components/Alert/Error";
 import Confirm from "../../small_components/Confirm";
@@ -10,6 +10,7 @@ import { createRoot } from "react-dom/client";
 const ModalContext = createContext({});
 
 export const ModalProvider = ({ children }) => {
+  const MODAL_ROOT = "modal";
   const handleOpenAlertSucess = async (text, onSubmit) => {
     const alert = document.getElementById("alert-success");
     alert?.classList.remove("hidden");

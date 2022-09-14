@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
 import { Routes, Route, Redirect, Navigate } from "react-router-dom";
 
+import Container from "./components/Layout/Container";
+
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
+import ForgotPasswordPage from "./pages/forgotPassword";
 import DashboardPage from "./pages/dashboard";
 import NotFoundPage from "./pages/error/404";
 
@@ -11,10 +14,12 @@ import UserPage from "./pages/user";
 
 // import "./styles/_reset.scss";
 import "./styles/global/_global.css";
+import ContainerPage from "./pages/layout/container";
 import useAuth from "./hooks/useAuth";
 import { ROUTER } from "./constant/router";
 import UserPageDetail from "./pages/user/detail";
 import { getIsValidToken } from "./utils/auth";
+
 
 export default function App() {
   const { handleVerifyToken } = useAuth();
@@ -24,6 +29,7 @@ export default function App() {
   }, []);
   return (
     <Routes>
+
       <Route
         path={ROUTER.LOGIN}
         element={
@@ -44,6 +50,7 @@ export default function App() {
       </Route>
       <Route path={ROUTER.NOT_FOUND} element={<NotFoundPage />} />
       <Route path={ROUTER.ALL} element={<NotFoundPage />} />
+
     </Routes>
   );
 }

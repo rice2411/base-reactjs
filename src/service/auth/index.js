@@ -5,6 +5,7 @@ const router = {
   login: `${env.apiUrl}/api/v1/auth/login`,
   register: `${env.apiUrl}/api/v1/auth/register`,
   verify: `${env.apiUrl}/api/v1/auth/verify`,
+  resetPassword: `${env.apiUrl}/api/v1/auth/reset-password`,
 };
 
 class AuthService {
@@ -19,6 +20,10 @@ class AuthService {
   static verify() {
     let uri = router.verify;
     return fetch.get(uri);
+  }
+  static resetPassword(params) {
+    let uri = router.resetPassword;
+    return fetch.post(uri, params);
   }
 }
 
