@@ -388,7 +388,13 @@ export default function User() {
                     >
                       <img
                         className="w-10 h-10 rounded-full"
-                        src={`${FILE_PATH + user?.avatar || DEFAULT_AVATAR}`}
+                        src={`${
+                          user?.avatar
+                            ? user?.type_account == "default"
+                              ? FILE_PATH + user?.avatar
+                              : user?.avatar
+                            : DEFAULT_AVATAR
+                        }`}
                         alt={`${user?.username} avatar`}
                       />
                       <div className="pl-3">
