@@ -23,7 +23,6 @@ export default function Modal({ isOpen, setClose, ...props }) {
 
   return (
     <ModalDefault
-      id="modal"
       show={isOpen}
       size="xl"
       onClose={() => handleCloseModal(setClose)}
