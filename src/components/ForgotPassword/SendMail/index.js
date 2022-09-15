@@ -1,18 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useFormik } from "formik";
+import { PRIVACY_URL } from "../../../constant/privacy";
 
 import { forgotPasswordSchema } from "./forgotPasswordSchema";
 import MailService from "../../../service/mail";
 import useModal from "../../../hooks/useModal";
+import { STEPS } from "../helper";
 
-function SendMail({ setEmail, className }) {
+function SendMail({ setEmail, className, refStep, nextStep }) {
   const { handleOpenConfirm, handleOpenAlertSucess } = useModal();
 
   const emailRef = useRef();
   const checkRef = useRef();
 
   const [checkSubmit, setCheckSubmit] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
@@ -23,25 +26,25 @@ function SendMail({ setEmail, className }) {
     setErrMsg("");
   }, []);
 
-  const switchForm = ()=>{
-    const frmEmail = document.getElementById("forgotPwd-mail");
-    const frmOtp = document.getElementById("forgotPwd-otp");
-    frmEmail?.classList.add("-translate-x-full");
-    frmOtp?.classList.remove("translate-x-full");
-  }
   const handleSubmit = async (values) => {
     if (checkSubmit) {
       const params = {
         email: values.email,
       };
       setEmail(values.email);
+      setIsSubmitting(true);
       try {
         const response = await MailService.SendMail(params);
-        switchForm();
+        handleOpenAlertSucess(
+          "Cập nhật thành công tâm linh vãi cả bìu",
+          nextStep(STEPS.otp)
+        );
       } catch (err) {
         if (err?.response) {
           setErrMsg(err.response.data.message);
         }
+      } finally {
+        setIsSubmitting(false);
       }
     } else {
       checkRef.current.focus();
@@ -63,7 +66,11 @@ function SendMail({ setEmail, className }) {
   }, []);
 
   return (
-    <section className={`bg-gray-50 dark:bg-gray-900 w-full" ${className}`} id="forgotPwd-mail">
+    <section
+      className={`bg-gray-50 dark:bg-gray-900 w-full" ${className}`}
+      ref={refStep}
+      id="input-email-form"
+    >
       <div className="flex items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white relative rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className={`sm:p-8 `}>
@@ -71,7 +78,7 @@ function SendMail({ setEmail, className }) {
               Quên mật khẩu?
             </h1>
             <p className="leading-tight mb-6 mt-2 text-gray-900 dark:text-white">
-              Vui lòng nhập email để xác thực tài khoản của bạn.
+              Vui lòng nhập email đã đăng ký của bạn
             </p>
             <form
               className="space-y-4 md:space-y-6"
@@ -131,7 +138,8 @@ function SendMail({ setEmail, className }) {
                     Tôi đồng ý với{" "}
                     <a
                       className="font-medium text-indigo-600 hover:text-indigo-500"
-                      href="#"
+                      href={PRIVACY_URL}
+                      target="blank"
                     >
                       Điều khoản và điều kiện
                     </a>
@@ -141,9 +149,14 @@ function SendMail({ setEmail, className }) {
               <div className="flex justify-between">
                 <button
                   type="submit"
-                  className="group relative flex justify-center py-2 px-8 border border-transparent text-m font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  disabled={isSubmitting}
+                  className={`${
+                    isSubmitting
+                      ? "bg-indigo-400"
+                      : "bg-indigo-600 hover:bg-indigo-700"
+                  } group relative flex justify-center py-2 px-8 border border-transparent text-m font-medium rounded-md text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                 >
-                  Tiếp tục
+                  {isSubmitting ? "... Đang xác thực" : "Tiếp tục"}
                 </button>
                 <p className="text-sm font-light text-gray-900 dark:text-gray-400">
                   <Link

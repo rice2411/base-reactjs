@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { Routes, Route, Redirect, Navigate } from "react-router-dom";
 
+import Container from "./components/Layout/Container";
+
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
 import ForgotPasswordPage from "./pages/forgotPassword";
@@ -43,6 +45,7 @@ export default function App() {
             )
           }
         />
+        <Route path={ROUTER.FORGOTPASSWORD} element={<ForgotPasswordPage />} />
       </Route>
       <Route element={<LayoutPage />}>
         <Route path={ROUTER.DASHBOARD} element={<DashboardPage />} />

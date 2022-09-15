@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { BiArrowBack } from 'react-icons/bi';
+import { BiArrowBack } from "react-icons/bi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 
 import { OTPSchema } from "./OTPSchema";
 import MailService from "../../../service/mail";
 import useModal from "../../../hooks/useModal";
+import { STEPS } from "../helper";
 
-function OTP({ setToken, email, className }) {
+function OTP({ setToken, email, className, refStep, nextStep, previousStep }) {
   const { handleOpenConfirm, handleOpenAlertSucess } = useModal();
 
   const otpRef = useRef();
@@ -19,20 +20,9 @@ function OTP({ setToken, email, className }) {
     otpRef.current.focus();
   }, []);
 
-  const switchForm = () =>{
-    const frmReset = document.getElementById("forgotPwd-reset");
-    const frmOtp = document.getElementById("forgotPwd-otp");
-    frmOtp?.classList.add("-translate-x-full");
-    frmReset?.classList.remove("translate-x-full");
-  }
-
-  const backForm = () =>{
-    const frmEmail = document.getElementById("forgotPwd-mail");
-    const frmOtp = document.getElementById("forgotPwd-otp");
-    frmEmail?.classList.remove("-translate-x-full");
-    frmOtp?.classList.add("translate-x-full");
-  }
-  
+  const handleHandleVeirySuccess = () => {
+    nextStep(STEPS.resetPassword);
+  };
   const handleSubmit = async (values) => {
     const params = {
       email: email,
@@ -41,8 +31,7 @@ function OTP({ setToken, email, className }) {
     try {
       const response = await MailService.SendOtp(params);
       setToken(response.data.data.token);
-      switchForm();
-      // handleOpenAlertSucess("Cập nhật thành công");
+      handleOpenAlertSucess("Cập nhật thành công", handleHandleVeirySuccess);
     } catch (err) {
       if (err?.response) {
         setErrMsg(err.response.data.message);
@@ -68,11 +57,19 @@ function OTP({ setToken, email, className }) {
   return (
     <section
       className={`bg-gray-50 dark:bg-gray-900 w-full" ${className}`}
-      id="forgotPwd-otp"
+      id="input-otp-form"
+      ref={refStep}
     >
       <div className="flex items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white relative rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <span className="text-2xl absolute top-2 left-4 hover:text-3xl cursor-pointer" onClick={backForm}><BiArrowBack/></span>
+          <span
+            className="text-2xl absolute top-2 left-4 hover:text-3xl cursor-pointer"
+            onClick={() => {
+              previousStep(STEPS.sendMail);
+            }}
+          >
+            <BiArrowBack />
+          </span>
           <div className={`sm:p-8`}>
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Xác thực tài khoản.

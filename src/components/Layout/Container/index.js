@@ -3,7 +3,12 @@ import { Outlet } from "react-router-dom";
 
 function Container() {
   return (
-      <div id="modal"> <Outlet /> </div>
+    <div>
+      <div id="modal"></div>
+      {/* <> */}
+
+      <Outlet />
+    </div>
   );
 }
 
