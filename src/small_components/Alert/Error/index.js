@@ -1,15 +1,17 @@
 import React from "react";
 import { Modal, Button } from "flowbite-react";
-export default function AlertError({ isOpen, text }) {
+
+import { handleCloseModal } from "../../../context/modal";
+
+export default function AlertError({ text }) {
   const handleClose = () => {
-    const alert = document.getElementById("alert-error");
-    alert?.classList.add("hidden");
+    handleCloseModal();
   };
 
   return (
     <>
       <Modal
-        show={isOpen}
+        show={true}
         size="md"
         popup={true}
         id="alert-error"

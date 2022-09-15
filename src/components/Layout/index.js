@@ -7,17 +7,11 @@ import Navbar from "../../components/Layout/Navbar";
 function Layout() {
   return (
     <div className="flex flex-col min-h-screen ">
-      <div id="modal"></div>
-      {/* <> */}
       <Navbar />
-
       <div className=" mx-auto max-w-7xl flex-1 w-full">
-        {/* <div className=" mx-auto max-w-7xl"> */}
         <Outlet />
       </div>
-
       <Footer />
-      {/* </> */}
     </div>
   );
 }

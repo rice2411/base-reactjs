@@ -6,10 +6,11 @@ import { PRIVACY_URL } from "../../../constant/privacy";
 import { EmailSchema } from "./emailSchema";
 import MailService from "../../../service/mail";
 import { STEPS } from "../helper";
+import useLoading from "../../../hooks/useLoading";
 
 function SendMail({ setEmail, className, refStep, nextStep, emailRef }) {
-
   const checkRef = useRef();
+  const { handleShowLoader, handleHiddenLoader } = useLoading();
 
   const [checkSubmit, setCheckSubmit] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,15 +27,17 @@ function SendMail({ setEmail, className, refStep, nextStep, emailRef }) {
       };
       setEmail(values.email);
       setIsSubmitting(true);
+      handleShowLoader();
       try {
         const response = await MailService.SendMail(params);
-        nextStep(STEPS.otp)
+        if (response?.data?.data) nextStep(STEPS.otp);
       } catch (err) {
         if (err?.response) {
           setErrMsg(err.response.data.message);
         }
       } finally {
         setIsSubmitting(false);
+        handleHiddenLoader();
       }
     } else {
       checkRef.current.focus();

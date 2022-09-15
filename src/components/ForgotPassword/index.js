@@ -15,11 +15,11 @@ export default function ForgotPassword() {
   const step3 = useRef();
   const emailRef = useRef();
 
-  useEffect(()=>{
-    setTimeout(()=>{
-      if(time!== 0) setTime(time-1);
-    },1000)
-  }, [time])
+  useEffect(() => {
+    setTimeout(() => {
+      if (time) setTime(time - 1);
+    }, 1000);
+  }, [time]);
 
   const classStep = {
     leftSide: "-translate-x-full",
@@ -38,22 +38,22 @@ export default function ForgotPassword() {
     setToken(token);
   };
   const nextStep = (step) => {
-    if (step == STEPS.otp) {
+    if (step === STEPS.otp) {
       step1.current.classList.add(classStep.leftSide);
       step2.current.classList.remove(classStep.rightSide);
-      setTime(90);
+      setTime(2);
     }
-    if (step == STEPS.resetPassword) {
+    if (step === STEPS.resetPassword) {
       step2.current.classList.add(classStep.leftSide);
       step3.current.classList.remove(classStep.rightSide);
     }
   };
   const previousStep = (step) => {
-    if (step == STEPS.sendMail) {
+    if (step === STEPS.sendMail) {
       step1.current.classList.remove(classStep.leftSide);
       step2.current.classList.add(classStep.rightSide);
     }
-    if (step == STEPS.otp) {
+    if (step === STEPS.otp) {
       step2.current.classList.remove(classStep.leftSide);
       step3.current.classList.add(classStep.rightSide);
     }
@@ -63,6 +63,7 @@ export default function ForgotPassword() {
     step2.current.classList.add(classStep.rightSide);
     step3.current.classList.add(classStep.rightSide);
     emailRef.current.focus();
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -71,7 +72,7 @@ export default function ForgotPassword() {
         setEmail={handleSetEmail}
         className="absolute inset-0 transform-translate duration-500 linear"
         refStep={step1}
-        emailRef = {emailRef}
+        emailRef={emailRef}
         nextStep={nextStep}
       />
       <OTP
@@ -80,7 +81,7 @@ export default function ForgotPassword() {
         setTime={handleSetTime}
         className="absolute inset-0 transform-translate duration-500 linear"
         refStep={step2}
-        time = {time}
+        time={time}
         nextStep={nextStep}
         previousStep={previousStep}
       />

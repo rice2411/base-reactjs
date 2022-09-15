@@ -10,8 +10,10 @@ import { STEPS } from "../helper";
 
 function ResetPassword({ token, className, refStep, previousStep, resetRef }) {
   const { handleOpenAlertSucess } = useModal();
+
   const navigate = useNavigate();
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
@@ -27,13 +29,19 @@ function ResetPassword({ token, className, refStep, previousStep, resetRef }) {
       token: token,
       password: values.password,
     };
+    setIsSubmitting(true);
     try {
       const response = await AuthService.resetPassword(params);
-      handleOpenAlertSucess("Cập nhật thành công! Vui lòng đăng nhập lại.", reSignIn);
-    } catch (err) {
-      {
-        setErrMsg(err.response.data.message);
+      if (response?.data?.data) {
+        handleOpenAlertSucess(
+          "Cập nhật thành công! Vui lòng đăng nhập lại.",
+          reSignIn
+        );
       }
+    } catch (err) {
+      setErrMsg(err.response.data.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -150,9 +158,13 @@ function ResetPassword({ token, className, refStep, previousStep, resetRef }) {
               <div className="flex justify-between">
                 <button
                   type="submit"
-                  className="group relative flex justify-center py-2 px-8 border border-transparent text-m font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className={`${
+                    isSubmitting
+                      ? "bg-indigo-400"
+                      : "bg-indigo-600 hover:bg-indigo-700"
+                  } group relative flex justify-center py-2 px-8 border border-transparent text-m font-medium rounded-md text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                 >
-                  Tiếp tục
+                  {isSubmitting ? "... Đang xác thực" : "Tiếp tục"}
                 </button>
                 <p className="text-sm font-light text-gray-900 dark:text-gray-400">
                   <Link

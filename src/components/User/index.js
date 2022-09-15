@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { DEFAULT_AVATAR, FILE_PATH } from "../../constant/image";
+import { DEFAULT_AVATAR, getFile } from "../../constant/image";
 import UserService from "../../service/user";
 import { debounce } from "lodash";
 import Pagination from "../../shared/Table/Pagination";
 import Loading from "../../shared/Animations/Loading";
 import { PAGINATE } from "../../constant/paginate";
 import Modal from "../../small_components/Modal";
-import EditUserModal, { BodyContent, HeaderContent } from "./Edit";
+import EditUserModal from "./Edit";
 import useModal from "../../hooks/useModal";
 import { exportExcel, importExcel } from "../../helper/excel";
 import { User as UserModel } from "../../model/user";
@@ -64,7 +64,7 @@ export default function User() {
     };
     try {
       const response = await UserService.importList(params);
-      setIsFetchData((preState) => !preState);
+      if (response?.data?.data) setIsFetchData((preState) => !preState);
     } catch (err) {
       handleOpenAlertError(err?.response?.data?.message);
     }
@@ -91,9 +91,7 @@ export default function User() {
     const check = e.target.checked;
     if (check) {
       let listUserId = [];
-      users.map((user) => {
-        listUserId.push(user._id);
-      });
+      users.map((user) => listUserId.push(user._id));
       setUsersSelected(listUserId);
       setIsSelectAll(true);
     } else {
@@ -107,7 +105,7 @@ export default function User() {
     let currentListUser = [...usersSelected];
     if (check) {
       currentListUser.push(userId);
-      if (currentListUser.length == users.length) {
+      if (currentListUser.length === users.length) {
         setIsSelectAll(true);
       }
       setUsersSelected(currentListUser);
@@ -136,7 +134,7 @@ export default function User() {
     };
     try {
       const response = await UserService.deactiveUsers(param);
-      setIsFetchData((preState) => !preState);
+      if (response?.data?.data) setIsFetchData((preState) => !preState);
     } catch (err) {
       console.log(err);
     }
@@ -174,7 +172,7 @@ export default function User() {
     setContentSearch(e.target.value);
     handleDebounceSearch(e.target.value);
   };
-
+  // eslint-disable-next-line
   const handleDebounceSearch = useCallback(
     debounce((searchValue) => {
       fetchUsers({
@@ -188,6 +186,7 @@ export default function User() {
   useEffect(() => {
     fetchUsers(params);
     setContentSearch("");
+    // eslint-disable-next-line
   }, [isFetchData]);
 
   useEffect(() => {
@@ -254,31 +253,31 @@ export default function User() {
               aria-labelledby="dropdownActionButton"
             >
               <li>
-                <a
+                <span
                   onClick={() => handleImportExcel()}
-                  className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  className="hover:cursor-pointer block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >
                   Nhập dữ liệu từ excel
-                </a>
+                </span>
               </li>
               <li>
-                <a
+                <span
                   onClick={() => handleExportExcel()}
-                  className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  className="hover:cursor-pointer block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >
                   Xuất excel
-                </a>
+                </span>
               </li>
             </ul>
             <div className="py-1">
-              <a
+              <span
                 onClick={() => {
                   handleDeactiveUser();
                 }}
-                className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                className="hover:cursor-pointer block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
               >
                 Xoá người dùng
-              </a>
+              </span>
             </div>
           </div>
         </div>
@@ -349,11 +348,13 @@ export default function User() {
             </tr>
           </thead>
           {isLoading ? (
-            <tr className="text-center">
-              <td colSpan={6} className="py-4 px-6">
-                <Loading />
-              </td>
-            </tr>
+            <tbody>
+              <tr className="text-center">
+                <td colSpan={6} className="py-4 px-6">
+                  <Loading />
+                </td>
+              </tr>
+            </tbody>
           ) : (
             <tbody>
               {users && users?.length ? (
@@ -390,10 +391,10 @@ export default function User() {
                         className="w-10 h-10 rounded-full"
                         src={`${
                           user?.avatar
-                            ? user?.type_account == "default"
-                              ? FILE_PATH + user?.avatar
+                            ? user?.type_account === "default"
+                              ? getFile(user?.avatar)
                               : user?.avatar
-                            : DEFAULT_AVATAR
+                            : getFile(DEFAULT_AVATAR)
                         }`}
                         alt={`${user?.username} avatar`}
                       />
@@ -420,12 +421,12 @@ export default function User() {
                       </div>
                     </td>
                     <td className="py-4 px-6 align-middle">
-                      <a
+                      <span
                         onClick={() => handleOpenModalCreateUser(user)}
                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline hover:cursor-pointer "
                       >
                         Chỉnh sửa
-                      </a>
+                      </span>
                     </td>
                   </tr>
                 ))
