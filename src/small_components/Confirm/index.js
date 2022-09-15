@@ -1,13 +1,11 @@
 import React from "react";
 import { Modal, Button } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
-import useModal from "../../hooks/useModal";
+import { handleCloseModal } from "../../context/modal";
 
 export default function Confirm({ isOpen, text, onSubmit }) {
-  const { handleOpenAlertError } = useModal();
   const handleClose = () => {
-    const alert = document.getElementById("confirm");
-    alert?.classList.add("hidden");
+    handleCloseModal();
   };
 
   return (
@@ -37,7 +35,7 @@ export default function Confirm({ isOpen, text, onSubmit }) {
                     onSubmit();
                     handleClose();
                   } catch (err) {
-                    handleOpenAlertError(err?.response?.data?.message);
+                    console.log(err);
                   }
                 }}
               >

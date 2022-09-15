@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route, Redirect, Navigate } from "react-router-dom";
-
-import Container from "./components/Layout/Container";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
@@ -14,7 +12,7 @@ import UserPage from "./pages/user";
 
 // import "./styles/_reset.scss";
 import "./styles/global/_global.css";
-import ContainerPage from "./pages/layout/container";
+
 import useAuth from "./hooks/useAuth";
 import { ROUTER } from "./constant/router";
 import UserPageDetail from "./pages/user/detail";
@@ -25,28 +23,24 @@ export default function App() {
   const isValidToken = getIsValidToken();
   useEffect(() => {
     handleVerifyToken();
+    // eslint-disable-next-line
   }, []);
   return (
     <Routes>
-      <Route element={<ContainerPage />}>
-        <Route
-          path={ROUTER.LOGIN}
-          element={
-            !isValidToken ? <LoginPage /> : <Navigate to={ROUTER.DASHBOARD} />
-          }
-        />
-        <Route
-          path={ROUTER.REGISTER}
-          element={
-            !isValidToken ? (
-              <RegisterPage />
-            ) : (
-              <Navigate to={ROUTER.DASHBOARD} />
-            )
-          }
-        />
-        <Route path={ROUTER.FORGOTPASSWORD} element={<ForgotPasswordPage />} />
-      </Route>
+      <Route
+        path={ROUTER.LOGIN}
+        element={
+          !isValidToken ? <LoginPage /> : <Navigate to={ROUTER.DASHBOARD} />
+        }
+      />
+      <Route
+        path={ROUTER.REGISTER}
+        element={
+          !isValidToken ? <RegisterPage /> : <Navigate to={ROUTER.DASHBOARD} />
+        }
+      />
+      <Route path={ROUTER.FORGOTPASSWORD} element={<ForgotPasswordPage />} />
+
       <Route element={<LayoutPage />}>
         <Route path={ROUTER.DASHBOARD} element={<DashboardPage />} />
         <Route path={ROUTER.SLASH} element={<DashboardPage />} />

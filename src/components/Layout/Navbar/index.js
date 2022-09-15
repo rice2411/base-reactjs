@@ -13,7 +13,7 @@ import { classNames } from "./helper";
 import { Link } from "react-router-dom";
 
 import { getUser } from "../../../utils/auth";
-import { DEFAULT_AVATAR, FILE_PATH } from "../../../constant/image";
+import { DEFAULT_AVATAR, getFile } from "../../../constant/image";
 import useMode from "../../../hooks/useMode";
 import useAuth from "../../../hooks/useAuth";
 
@@ -32,7 +32,7 @@ export default function Navbar() {
   const activeTab = (page) => {
     let naviArr = [...navi];
     for (let i = 0; i < naviArr.length; i++) {
-      if (naviArr[i].href == page) naviArr[i].current = true;
+      if (naviArr[i].href === page) naviArr[i].current = true;
       else naviArr[i].current = false;
     }
     setNavi(naviArr);
@@ -45,6 +45,7 @@ export default function Navbar() {
 
   useEffect(() => {
     handleInitActiveTab();
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -130,10 +131,9 @@ export default function Navbar() {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src={
-                          FILE_PATH +
-                          (user.avatar ? user.avatar : DEFAULT_AVATAR)
-                        }
+                        src={getFile(
+                          user.avatar ? user.avatar : DEFAULT_AVATAR
+                        )}
                         alt=""
                       />
                       <h3 className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
@@ -153,44 +153,41 @@ export default function Navbar() {
                     <Menu.Items className="z-10 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="javascript:void(0)"
+                          <span
                             className={classNames(
                               active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
+                              "block px-4 py-2 text-sm text-gray-700 hover:cursor-pointer"
                             )}
                           >
                             Your Profile
-                          </a>
+                          </span>
                         )}
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="javascript:void(0)"
+                          <span
                             className={classNames(
                               active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
+                              "block px-4 py-2 text-sm text-gray-700 hover:cursor-pointer"
                             )}
                           >
                             Settings
-                          </a>
+                          </span>
                         )}
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="javascript:void(0)"
+                          <span
                             onClick={() => {
                               logout();
                             }}
                             className={classNames(
                               active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
+                              "block px-4 py-2 text-sm text-gray-700 hover:cursor-pointer"
                             )}
                           >
                             Sign out
-                          </a>
+                          </span>
                         )}
                       </Menu.Item>
                     </Menu.Items>

@@ -1,5 +1,4 @@
 import cookies from "js-cookie";
-import AuthService from "../service/auth";
 
 export function setToken(token) {
   cookies.set("token", token);

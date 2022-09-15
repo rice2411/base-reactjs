@@ -1,28 +1,36 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BiArrowBack } from "react-icons/bi";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 
 import { OTPSchema } from "./OTPSchema";
 import MailService from "../../../service/mail";
-import useModal from "../../../hooks/useModal";
 import { STEPS } from "../helper";
 
-function OTP({ setToken, email, className, refStep, nextStep, previousStep }) {
-  const { handleOpenConfirm, handleOpenAlertSucess } = useModal();
-
-  const otpRef = useRef();
-
+function OTP({
+  setToken,
+  email,
+  className,
+  refStep,
+  nextStep,
+  previousStep,
+  time,
+  setTime,
+}) {
   const [errMsg, setErrMsg] = useState("");
+  const [text, setText] = useState("Gửi lại mã xác thực");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     setErrMsg("");
-    otpRef.current.focus();
   }, []);
 
-  const handleHandleVeirySuccess = () => {
-    nextStep(STEPS.resetPassword);
-  };
+  function formatTime(time) {
+    var m = ("0" + (Math.floor(time / 60) % 60)).slice(-2),
+      s = ("0" + (time % 60)).slice(-2);
+    return (m > 0 ? m + ":" : "") + (time > 60 ? s : "00:" + s);
+  }
+
   const handleSubmit = async (values) => {
     const params = {
       email: email,
@@ -31,10 +39,28 @@ function OTP({ setToken, email, className, refStep, nextStep, previousStep }) {
     try {
       const response = await MailService.SendOtp(params);
       setToken(response.data.data.token);
-      handleOpenAlertSucess("Cập nhật thành công", handleHandleVeirySuccess);
+      nextStep(STEPS.resetPassword);
     } catch (err) {
       if (err?.response) {
         setErrMsg(err.response.data.message);
+      }
+    }
+  };
+
+  const sendMailAgain = async () => {
+    if (time === 0) {
+      setIsSubmitting(true);
+      setText("Chờ xíu!!");
+      const params = {
+        email: email,
+      };
+      try {
+        const response = await MailService.SendMail(params);
+        if (response?.data?.data) setTime(2);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -74,11 +100,23 @@ function OTP({ setToken, email, className, refStep, nextStep, previousStep }) {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Xác thực tài khoản.
             </h1>
-            <p className="leading-tight mb-6 mt-2 text-gray-900 dark:text-white">
-              Vui lòng nhập mã OTP được gửi về trong hòm thư của bạn.
+            <p className="leading-tight mt-2 text-gray-900 dark:text-white">
+              Vui lòng nhập mã OTP được gửi về trong hòm thư của bạn.{" "}
+              <span
+                className={`${
+                  time
+                    ? "text-red-500 "
+                    : "text-indigo-600  hover:underline cursor-pointer"
+                }`}
+                onClick={sendMailAgain}
+                disabled={isSubmitting}
+              >
+                {time ? formatTime(time) : text}
+              </span>
             </p>
+
             <form
-              className="space-y-4 md:space-y-6"
+              className="space-y-4 md:space-y-6 mt-3"
               action="#"
               onSubmit={formik.handleSubmit}
             >
@@ -99,7 +137,6 @@ function OTP({ setToken, email, className, refStep, nextStep, previousStep }) {
                   placeholder="OTP"
                   onChange={formik.handleChange}
                   value={formik.values.OTP}
-                  ref={otpRef}
                 />
               </div>
 
@@ -115,9 +152,13 @@ function OTP({ setToken, email, className, refStep, nextStep, previousStep }) {
               <div className="flex justify-between">
                 <button
                   type="submit"
-                  className="group relative flex justify-center py-2 px-8 border border-transparent text-m font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className={`${
+                    isSubmitting
+                      ? "bg-indigo-400"
+                      : "bg-indigo-600 hover:bg-indigo-700"
+                  } group relative flex justify-center py-2 px-8 border border-transparent text-m font-medium rounded-md text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                 >
-                  Tiếp tục
+                  {isSubmitting ? "... Đang xác thực" : "Tiếp tục"}
                 </button>
                 <p className="text-sm font-light text-gray-900 dark:text-gray-400">
                   <Link

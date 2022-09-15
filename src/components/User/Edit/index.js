@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import { Modal as ModalDefault, Button } from "flowbite-react";
-import { DEFAULT_AVATAR, FILE_PATH } from "../../../constant/image";
+import { DEFAULT_AVATAR, getFile } from "../../../constant/image";
 import { User } from "../../../model/user";
 import { handleCloseModal } from "../../../small_components/Modal";
 import UserService from "../../../service/user";
@@ -53,14 +53,13 @@ export default function EditUserModal({ user, setClose, setIsFetchData }) {
       </ModalDefault.Header>
       <Formik
         initialValues={{
-          firstname: user?.firstname || "",
-          lastname: user?.lastname || "",
+          first_name: user?.first_name || "",
+          last_name: user?.last_name || "",
           email: user?.email || "",
-          phoneNumber: user?.phoneNumber || "",
+          phone: user?.phone || "",
           avatar: user?.avatar || DEFAULT_AVATAR,
           file: null,
         }}
-        // validationSchema={loginSchema()}
         onSubmit={handleUpdateUser}
         enableReinitialize={true}
       >
@@ -74,7 +73,7 @@ export default function EditUserModal({ user, setClose, setIsFetchData }) {
                       <img
                         ref={avatarRef}
                         className="w-40 h-40 rounded-full"
-                        src={FILE_PATH + user?.avatar || DEFAULT_AVATAR}
+                        src={getFile(user?.avatar || DEFAULT_AVATAR)}
                         alt="Rounded avatar"
                       />
                     </div>
@@ -101,34 +100,34 @@ export default function EditUserModal({ user, setClose, setIsFetchData }) {
 
                     <div className="col-span-6 sm:col-span-3">
                       <label
-                        htmlFor="firstname"
+                        htmlFor="first_name"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       >
                         Họ và tên đệm
                       </label>
                       <Field
                         type="text"
-                        name="firstname"
+                        name="first_name"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Họ và tên đệm"
                         required=""
-                        value={values.firstname}
+                        value={values.first_name}
                       />
                     </div>
                     <div className="col-span-6 sm:col-span-3">
                       <label
-                        htmlFor="lastname"
+                        htmlFor="last_name"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       >
                         Tên
                       </label>
                       <Field
                         type="text"
-                        name="lastname"
+                        name="last_name"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Tên"
                         required=""
-                        value={values.lastname}
+                        value={values.last_name}
                       />
                     </div>
                     <div className="col-span-6 sm:col-span-3">
@@ -150,18 +149,18 @@ export default function EditUserModal({ user, setClose, setIsFetchData }) {
                     </div>
                     <div className="col-span-6 sm:col-span-3">
                       <label
-                        htmlFor="phoneNumber"
+                        htmlFor="phone"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       >
                         Số điện thoại
                       </label>
                       <Field
                         type="number"
-                        name="phoneNumber"
+                        name="phone"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Số điện thoại"
                         required=""
-                        value={values.phoneNumber}
+                        value={values.phone}
                       />
                     </div>
                   </div>

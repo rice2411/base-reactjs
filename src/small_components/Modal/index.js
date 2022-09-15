@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Modal as ModalDefault } from "flowbite-react";
+import { handleHiddenScrollBar } from "../../utils/scrollbar";
 
 export const handleCloseModal = (setClose) => {
   document.documentElement.classList.remove("overflow-hidden");
@@ -9,9 +10,6 @@ export default function Modal({ isOpen, setClose, ...props }) {
   const handleRemoveModalClass = () => {
     const modal = document.getElementById("modal");
     modal?.classList?.remove("items-center");
-  };
-  const handleHiddenScrollBar = () => {
-    document.documentElement.classList.add("overflow-hidden");
   };
 
   useEffect(() => {

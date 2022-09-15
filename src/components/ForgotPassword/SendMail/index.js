@@ -3,24 +3,18 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { PRIVACY_URL } from "../../../constant/privacy";
 
-import { forgotPasswordSchema } from "./forgotPasswordSchema";
+import { EmailSchema } from "./emailSchema";
 import MailService from "../../../service/mail";
-import useModal from "../../../hooks/useModal";
 import { STEPS } from "../helper";
+import useLoading from "../../../hooks/useLoading";
 
-function SendMail({ setEmail, className, refStep, nextStep }) {
-  const { handleOpenConfirm, handleOpenAlertSucess } = useModal();
-
-  const emailRef = useRef();
+function SendMail({ setEmail, className, refStep, nextStep, emailRef }) {
   const checkRef = useRef();
+  const { handleShowLoader, handleHiddenLoader } = useLoading();
 
   const [checkSubmit, setCheckSubmit] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errMsg, setErrMsg] = useState("");
-
-  useEffect(() => {
-    emailRef.current.focus();
-  }, []);
 
   useEffect(() => {
     setErrMsg("");
@@ -33,18 +27,17 @@ function SendMail({ setEmail, className, refStep, nextStep }) {
       };
       setEmail(values.email);
       setIsSubmitting(true);
+      handleShowLoader();
       try {
         const response = await MailService.SendMail(params);
-        handleOpenAlertSucess(
-          "Cập nhật thành công tâm linh vãi cả bìu",
-          nextStep(STEPS.otp)
-        );
+        if (response?.data?.data) nextStep(STEPS.otp);
       } catch (err) {
         if (err?.response) {
           setErrMsg(err.response.data.message);
         }
       } finally {
         setIsSubmitting(false);
+        handleHiddenLoader();
       }
     } else {
       checkRef.current.focus();
@@ -55,7 +48,7 @@ function SendMail({ setEmail, className, refStep, nextStep }) {
     initialValues: {
       email: "",
     },
-    validationSchema: forgotPasswordSchema(),
+    validationSchema: EmailSchema(),
     onSubmit: handleSubmit,
   });
   const removeDarkMode = () => {

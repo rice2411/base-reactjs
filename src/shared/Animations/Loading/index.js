@@ -3,7 +3,7 @@ import React from "react";
 export default function Loading() {
   return (
     <div className="">
-      <div role="status  ">
+      <div>
         <svg
           className="inline mr-2 w-10 h-10 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
           viewBox="0 0 100 101"
@@ -22,5 +22,14 @@ export default function Loading() {
         <span className="sr-only">Loading...</span>
       </div>
     </div>
+  );
+}
+export function OverlayLoading() {
+  return (
+    <>
+      <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
+        <Loading />
+      </div>
+    </>
   );
 }

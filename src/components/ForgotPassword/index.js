@@ -8,10 +8,18 @@ import { STEPS } from "./helper";
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [token, setToken] = useState("");
+  const [time, setTime] = useState(0);
 
   const step1 = useRef();
   const step2 = useRef();
   const step3 = useRef();
+  const emailRef = useRef();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (time) setTime(time - 1);
+    }, 1000);
+  }, [time]);
 
   const classStep = {
     leftSide: "-translate-x-full",
@@ -22,25 +30,30 @@ export default function ForgotPassword() {
     setEmail(mail);
   };
 
+  const handleSetTime = (t) => {
+    setTime(t);
+  };
+
   const handleSettoken = (token) => {
     setToken(token);
   };
   const nextStep = (step) => {
-    if (step == STEPS.otp) {
+    if (step === STEPS.otp) {
       step1.current.classList.add(classStep.leftSide);
       step2.current.classList.remove(classStep.rightSide);
+      setTime(2);
     }
-    if (step == STEPS.resetPassword) {
+    if (step === STEPS.resetPassword) {
       step2.current.classList.add(classStep.leftSide);
       step3.current.classList.remove(classStep.rightSide);
     }
   };
   const previousStep = (step) => {
-    if (step == STEPS.sendMail) {
+    if (step === STEPS.sendMail) {
       step1.current.classList.remove(classStep.leftSide);
       step2.current.classList.add(classStep.rightSide);
     }
-    if (step == STEPS.otp) {
+    if (step === STEPS.otp) {
       step2.current.classList.remove(classStep.leftSide);
       step3.current.classList.add(classStep.rightSide);
     }
@@ -49,6 +62,8 @@ export default function ForgotPassword() {
   useEffect(() => {
     step2.current.classList.add(classStep.rightSide);
     step3.current.classList.add(classStep.rightSide);
+    emailRef.current.focus();
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -57,13 +72,16 @@ export default function ForgotPassword() {
         setEmail={handleSetEmail}
         className="absolute inset-0 transform-translate duration-500 linear"
         refStep={step1}
+        emailRef={emailRef}
         nextStep={nextStep}
       />
       <OTP
         email={email}
         setToken={handleSettoken}
+        setTime={handleSetTime}
         className="absolute inset-0 transform-translate duration-500 linear"
         refStep={step2}
+        time={time}
         nextStep={nextStep}
         previousStep={previousStep}
       />

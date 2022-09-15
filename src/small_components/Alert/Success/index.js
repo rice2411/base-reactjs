@@ -1,16 +1,17 @@
 import React from "react";
 import { Modal, Button } from "flowbite-react";
-export default function AlertSuccess({ isOpen, text, onSubmit }) {
+import { handleCloseModal } from "../../../context/modal";
+
+export default function AlertSuccess({ text, onSubmit }) {
   const handleClose = () => {
-    const alert = document.getElementById("alert-success");
-    alert?.classList.add("hidden");
+    handleCloseModal();
     onSubmit();
   };
 
   return (
     <>
       <Modal
-        show={isOpen}
+        show={true}
         size="md"
         popup={true}
         id="alert-success"
