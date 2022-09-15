@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BiArrowBack } from "react-icons/bi";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 
 import { resetPasswordSchema } from "./resetPasswordSchema";
@@ -8,17 +8,14 @@ import AuthService from "../../../service/auth";
 import useModal from "../../../hooks/useModal";
 import { STEPS } from "../helper";
 
-function ResetPassword({ token, className, refStep, previousStep }) {
+function ResetPassword({ token, className, refStep, previousStep, resetRef }) {
   const { handleOpenAlertSucess } = useModal();
   const navigate = useNavigate();
-
-  const otpRef = useRef();
 
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
     setErrMsg("");
-    otpRef.current.focus();
   }, []);
 
   const reSignIn = () => {
@@ -32,7 +29,7 @@ function ResetPassword({ token, className, refStep, previousStep }) {
     };
     try {
       const response = await AuthService.resetPassword(params);
-      handleOpenAlertSucess("Cập nhật thành công", reSignIn);
+      handleOpenAlertSucess("Cập nhật thành công! Vui lòng đăng nhập lại.", reSignIn);
     } catch (err) {
       {
         setErrMsg(err.response.data.message);
@@ -107,9 +104,9 @@ function ResetPassword({ token, className, refStep, previousStep }) {
                     formik.errors.OTP ? "border-red-500" : "border-gray-300"
                   }  text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                   placeholder="Mật khẩu"
+                  ref={resetRef}
                   onChange={formik.handleChange}
                   value={formik.values.password}
-                  ref={otpRef}
                 />
               </div>
               <div>
@@ -138,7 +135,6 @@ function ResetPassword({ token, className, refStep, previousStep }) {
                   placeholder="Xác nhận mật khẩu"
                   onChange={formik.handleChange}
                   value={formik.values.confirmPassword}
-                  ref={otpRef}
                 />
               </div>
 
