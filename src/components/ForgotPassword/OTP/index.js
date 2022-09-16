@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import { OTPSchema } from "./OTPSchema";
 import MailService from "../../../service/mail";
 import { STEPS } from "../helper";
+import useLoading from "../../../hooks/useLoading";
 
 function OTP({
   setToken,
@@ -20,6 +21,7 @@ function OTP({
   const [errMsg, setErrMsg] = useState("");
   const [text, setText] = useState("Gửi lại mã xác thực");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { handleShowLoader, handleHiddenLoader } = useLoading();
 
   useEffect(() => {
     setErrMsg("");
@@ -36,20 +38,24 @@ function OTP({
       email: email,
       otp: values.OTP,
     };
+    setIsSubmitting(true);
+    handleShowLoader();
     try {
       const response = await MailService.SendOtp(params);
-      setToken(response.data.data.token);
-      nextStep(STEPS.resetPassword);
-    } catch (err) {
-      if (err?.response) {
-        setErrMsg(err.response.data.message);
+      if (response?.data?.data) {
+        setToken(response.data.data.token);
+        nextStep(STEPS.resetPassword);
       }
+    } catch (err) {
+      setErrMsg(err.response.data.message);
+    } finally {
+      handleHiddenLoader();
+      setIsSubmitting(false);
     }
   };
 
   const sendMailAgain = async () => {
     if (time === 0) {
-      setIsSubmitting(true);
       setText("Chờ xíu!!");
       const params = {
         email: email,
@@ -60,7 +66,6 @@ function OTP({
       } catch (err) {
         console.log(err);
       } finally {
-        setIsSubmitting(false);
       }
     }
   };

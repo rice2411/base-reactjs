@@ -5,7 +5,7 @@ import { debounce } from "lodash";
 import Pagination from "../../shared/Table/Pagination";
 import Loading from "../../shared/Animations/Loading";
 import { PAGINATE } from "../../constant/paginate";
-import Modal from "../../small_components/Modal";
+import Modal from "../../shared/Modal";
 import EditUserModal from "./Edit";
 import useModal from "../../hooks/useModal";
 import { exportExcel, importExcel } from "../../helper/excel";

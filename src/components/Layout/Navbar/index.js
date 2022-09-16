@@ -131,9 +131,13 @@ export default function Navbar() {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src={getFile(
-                          user.avatar ? user.avatar : DEFAULT_AVATAR
-                        )}
+                        src={
+                          user.type_account == "default"
+                            ? getFile(
+                                user.avatar ? user.avatar : DEFAULT_AVATAR
+                              )
+                            : user.avatar
+                        }
                         alt=""
                       />
                       <h3 className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">

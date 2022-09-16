@@ -17,6 +17,7 @@ import useAuth from "./hooks/useAuth";
 import { ROUTER } from "./constant/router";
 import UserPageDetail from "./pages/user/detail";
 import { getIsValidToken } from "./utils/auth";
+import Oauth2 from "./components/Login/oauth2";
 
 export default function App() {
   const { handleVerifyToken } = useAuth();
@@ -27,6 +28,12 @@ export default function App() {
   }, []);
   return (
     <Routes>
+      <Route
+        path={ROUTER.OAUTH2}
+        element={
+          !isValidToken ? <Oauth2 /> : <Navigate to={ROUTER.DASHBOARD} />
+        }
+      />
       <Route
         path={ROUTER.LOGIN}
         element={

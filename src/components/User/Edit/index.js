@@ -3,7 +3,7 @@ import { Formik, Form, Field } from "formik";
 import { Modal as ModalDefault, Button } from "flowbite-react";
 import { DEFAULT_AVATAR, getFile } from "../../../constant/image";
 import { User } from "../../../model/user";
-import { handleCloseModal } from "../../../small_components/Modal";
+import { handleCloseModal } from "../../../shared/Modal";
 import UserService from "../../../service/user";
 import useModal from "../../../hooks/useModal";
 

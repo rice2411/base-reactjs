@@ -1,6 +1,7 @@
 export const ROUTER = {
   SLASH: "/",
   LOGIN: "/login",
+  OAUTH2: "/oauth2/:id",
   REGISTER: "/register",
   FORGOTPASSWORD: "/forgotPassword",
   DASHBOARD: "/dashboard",
@@ -18,4 +19,5 @@ export const ROUTERS = [
   ROUTER.USER,
   ROUTER.NOT_FOUND,
   ROUTER.SLASH,
+  ROUTER.OAUTH2,
 ];

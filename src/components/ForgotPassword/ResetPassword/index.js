@@ -7,9 +7,11 @@ import { resetPasswordSchema } from "./resetPasswordSchema";
 import AuthService from "../../../service/auth";
 import useModal from "../../../hooks/useModal";
 import { STEPS } from "../helper";
+import useLoading from "../../../hooks/useLoading";
 
 function ResetPassword({ token, className, refStep, previousStep, resetRef }) {
   const { handleOpenAlertSucess } = useModal();
+  const { handleShowLoader, handleHiddenLoader } = useLoading();
 
   const navigate = useNavigate();
 
@@ -30,6 +32,7 @@ function ResetPassword({ token, className, refStep, previousStep, resetRef }) {
       password: values.password,
     };
     setIsSubmitting(true);
+    handleShowLoader();
     try {
       const response = await AuthService.resetPassword(params);
       if (response?.data?.data) {
@@ -42,6 +45,7 @@ function ResetPassword({ token, className, refStep, previousStep, resetRef }) {
       setErrMsg(err.response.data.message);
     } finally {
       setIsSubmitting(false);
+      handleHiddenLoader();
     }
   };
 

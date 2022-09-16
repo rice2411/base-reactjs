@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 
-import Login from "../../components/Login";
-import useAuth from "../../hooks/useAuth";
+import Login from "../../components/Login/auth";
 
 const LoginPage = () => {
   return <Login></Login>;

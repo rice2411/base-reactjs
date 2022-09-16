@@ -2,9 +2,9 @@ import React from "react";
 
 import { createContext } from "react";
 
-import AlertSuccess from "../../small_components/Alert/Success";
-import AlertError from "../../small_components/Alert/Error";
-import Confirm from "../../small_components/Confirm";
+import AlertSuccess from "../../shared/Alert/Success";
+import AlertError from "../../shared/Alert/Error";
+import Confirm from "../../shared/Confirm";
 import { modalRoot } from "../..";
 
 const ModalContext = createContext({});

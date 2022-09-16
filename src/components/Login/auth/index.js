@@ -2,21 +2,26 @@ import { LockClosedIcon } from "@heroicons/react/solid";
 import { Formik, Form, Field } from "formik";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import useModal from "../../hooks/useModal";
-import AuthService from "../../service/auth";
-import UserService from "../../service/user";
-import { setIsValidToken, setToken, setUser } from "../../utils/auth";
+import useAuth from "../../../hooks/useAuth";
+
+import AuthService from "../../../service/auth";
+import UserService from "../../../service/user";
+import ButtonIcon from "../../../shared/Button/Icon";
+import { setIsValidToken, setToken, setUser } from "../../../utils/auth";
 import {
   handleHiddenScrollBar,
   handleOpenScrollBar,
-} from "../../utils/scrollbar";
+} from "../../../utils/scrollbar";
 import { loginSchema } from "./loginSchema";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+import { BsFacebook } from "react-icons/bs";
 import "./styles.scss";
+import useLoading from "../../../hooks/useLoading";
+import OAuth2Service from "../../../service/oauth2";
 export default function Login() {
   const { persist, setPersist } = useAuth();
-  const { handleOpenAlertSucess } = useModal();
-
+  const { handleShowLoader, handleHiddenLoader } = useLoading();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -36,6 +41,7 @@ export default function Login() {
       username: values.username,
       password: values.password,
     };
+    handleShowLoader();
     try {
       const response = await AuthService.login(params);
 
@@ -60,6 +66,8 @@ export default function Login() {
         setErrMsg("Hệ thống lỗi!!");
       }
       errRef.current.focus();
+    } finally {
+      handleHiddenLoader();
     }
   };
 
@@ -67,8 +75,44 @@ export default function Login() {
     setPersist((prev) => !prev);
   };
 
-  const test = () => {
-    handleOpenAlertSucess("asdu");
+  const handleGoogleLogin = () => {
+    const win = window.open(
+      OAuth2Service.google(),
+      "Oauth2",
+      "height=600,width=600"
+    );
+    const timer = setInterval(() => {
+      if (win.closed) {
+        clearInterval(timer);
+        window.location.reload();
+      }
+    }, 500);
+  };
+  const handleFacebookLogin = () => {
+    const win = window.open(
+      OAuth2Service.facebook(),
+      "Oauth2",
+      "height=600,width=600"
+    );
+    const timer = setInterval(() => {
+      if (win.closed) {
+        clearInterval(timer);
+        window.location.reload();
+      }
+    }, 500);
+  };
+  const handleGitHubLogin = () => {
+    const win = window.open(
+      OAuth2Service.github(),
+      "Oauth2",
+      "height=600,width=600"
+    );
+    const timer = setInterval(() => {
+      if (win.closed) {
+        clearInterval(timer);
+        window.location.reload();
+      }
+    }, 500);
   };
 
   useEffect(() => {
@@ -82,13 +126,10 @@ export default function Login() {
   }, [persist]);
 
   return (
-    <div className="flex justify-center mt-40 ">
-      <div className=" py-12 px-4 sm:px-6 lg:px-8 shadow space-y-8 w-1/3">
+    <div className="flex justify-center  mt-12">
+      <div className=" py-12 px-4 sm:px-6 lg:px-8 shadow  w-1/3">
         <div>
-          <h2
-            className="mt-6 text-center text-3xl font-extrabold text-gray-900"
-            onClick={test}
-          >
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Đăng nhập
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
@@ -202,6 +243,36 @@ export default function Login() {
             </Form>
           )}
         </Formik>
+        <div className=" flex justify-center items-center">
+          <hr className="my-8 h-px bg-gray-200 border-0  w-1/2" />
+          <span className="text-gray-300 px-7">Hoặc</span>
+          <hr className="my-8 h-px bg-gray-200 border-0  w-1/2" />
+        </div>
+
+        <ButtonIcon
+          text={"Đăng nhập với Google"}
+          buttonClass="w-auto"
+          id="google"
+          onClick={handleGoogleLogin}
+        >
+          <FcGoogle />
+        </ButtonIcon>
+        <ButtonIcon
+          text={"Đăng nhập với Facebook"}
+          buttonClass="w-auto mt-2"
+          id="facebook"
+          onClick={handleFacebookLogin}
+        >
+          <BsFacebook className="text-sky-500" />
+        </ButtonIcon>
+        <ButtonIcon
+          text={"Đăng nhập với GitHub"}
+          buttonClass="w-auto mt-2"
+          id="github"
+          onClick={handleGitHubLogin}
+        >
+          <FaGithub />
+        </ButtonIcon>
       </div>
     </div>
   );
